@@ -1,0 +1,11 @@
+es:
+  activerecord:
+    errors:
+      models:
+        sell_material:
+          attributes:
+            menu_item:
+              required: "Debe seleccionar un elemento del menú"
+  errors:
+    messages:
+      required: "es un campo obligatorio"

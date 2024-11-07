@@ -1,0 +1,45 @@
+<div class="container my-4 p-4 bg-white rounded shadow">
+  <h1 class="text-center mb-4">Carta</h1>
+  <div class="text-center mt-4">
+    <%= link_to "Agregar elemento al Menú", new_menu_item_path, class: "btn btn-success" %>
+    <%= button_tag "Agregados", type: "button", class: "btn btn-secondary", data: { bs_toggle: "modal", bs_target: "#addonsModal" } %>
+  </div>
+  <%= search_form_for @q, url: menu_items_path, method: :get, html: { class: "my-3", data: { controller: "search", search_target: "form" } } do |f| %>
+    <div class="input-group mb-3">
+      <%= f.search_field :name_cont, class: "form-control", placeholder: "Escribe el nombre...", data: { action: "input->search#search", search_target: "input" } %>
+      <button type="submit" class="btn btn-primary">Buscar</button>
+      <%= link_to "Limpiar", menu_items_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+  <table class="table table-striped table-hover table-bordered table-menu-items">
+    <thead class="table-dark">
+      <tr>
+        <th>Item</th>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @menu_items.each_with_index do |menu_item, index| %>
+        <tr>
+          <td data-label="Item"><%= index + 1 + ((@menu_items.current_page - 1) * @menu_items.limit_value) %></td>
+          <td data-label="Nombre"><%= link_to menu_item.name, edit_menu_item_path(menu_item), class: "text-decoration-none" %></td>
+          <td data-label="Precio">$<%= number_to_currency(menu_item.price, unit: "", delimiter: ".", precision: 0) %></td>
+          <td data-label="Acciones" class="text-end">
+            <% unless menu_item.sell_material.present? %>
+              <%= form_with url: menu_item_path(menu_item), method: :delete, data: { turbo: false }, class: "d-inline" do %>
+                <%= button_tag "Eliminar", class: "btn btn-danger btn-sm", onclick: "return confirm('¿Estás seguro?');" %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-center my-3 pagination-container">
+    <%= paginate @menu_items %>
+  </div>
+</div>
+
+<%= render partial: 'menu_items/shared/addon_modal' %>

@@ -1,0 +1,61 @@
+<div class="container my-4 p-4 bg-white rounded shadow" data-controller="sell-materials nested-form">
+  <%= form_with model: @sell, data: { controller: 'nested-form', nested_form_wrapper_selector_value: '.nested-form-wrapper' } do |form| %>    
+    <% if @sell.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(@sell.errors.count, "error impide", "errores impiden") %> que impide guardar la venta:</h4>
+        <ul>
+          <% @sell.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <div class="text-end mb-3">
+      <%= link_to 'Historial Ventas', sells_path, class: 'btn btn-primary' %>
+    </div>
+    <table class="table table-striped table-hover table-bordered sell-materials-table">
+      <thead>
+        <tr>
+          <th>Menu Item</th>
+          <th>Agregados</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody data-nested-form-target="target">
+        <%= form.fields_for :sell_materials do |sm_form| %>
+          <tr class="sell-materials-row">
+            <%= render "sells/shared/sell_materials_fields", f: sm_form %>
+          </tr>
+        <% end %>
+        <template data-nested-form-target="template">
+          <%= form.fields_for :sell_materials, SellMaterial.new, child_index: Time.now.to_i do |sm_form| %>
+            <tr class="sell-materials-row">
+              <%= render "sells/shared/sell_materials_fields", f: sm_form %>
+            </tr>
+          <% end %>
+        </template>
+      </tbody>
+    </table>
+    <button type="button" class="btn btn-success" data-action="nested-form#add">Agregar Linea</button>
+    <div class="row">
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <%= form.label :client_name, 'Nombre Cliente', class: "form-label" %>
+        <%= form.text_field :client_name, placeholder: 'Nombre...', class: "form-control", required: true %>
+      </div>
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <%= form.label :payment_type, 'Tipo de Pago', class: "form-label" %>
+        <%= form.select :payment_type, Sell.payment_types.keys.map { |k| [k.humanize, k] }, {}, class: "form-control" %>
+      </div>
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <%= form.label :total, 'Total', class: "form-label" %>
+        <%= form.text_field :total, class: "form-control", data: { sell_materials_target: "totalField" }, readonly: true %>
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mt-4">
+      <%= form.submit "Guardar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>

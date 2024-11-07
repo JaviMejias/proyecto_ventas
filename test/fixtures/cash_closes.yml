@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  date: 2024-11-05
+  total_sales: 1
+  total_cash: 1
+  total_card: 1
+  total_transfer: 1
+
+two:
+  date: 2024-11-05
+  total_sales: 1
+  total_cash: 1
+  total_card: 1
+  total_transfer: 1

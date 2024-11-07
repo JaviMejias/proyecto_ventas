@@ -1,0 +1,251 @@
+@import "toastr.min.css";
+@import "slimselect";
+
+.toast-top-right {
+  top: 20px !important;
+  right: 20px !important;
+  z-index: 9999;
+}
+
+.toast-success .fa-check-circle,
+.toast-error .fa-exclamation-circle,
+.toast-info .fa-info-circle,
+.toast-warning .fa-exclamation-triangle {
+  font-size: 1.2rem;
+  margin-right: 8px;
+}
+
+.navbar {
+  background-color: #2c3e50;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.navbar .nav-link {
+  color: #ecf0f1;
+  padding: 8px 15px;
+  margin: 0 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .nav-link.active {
+  background-color: #3498db;
+  color: #ffffff;
+  border-radius: 5px;
+}
+
+.navbar .nav-link:hover {
+  background-color: #34495e;
+  color: #ffffff;
+}
+
+.table {
+  th, td {
+    vertical-align: middle;
+  }
+
+  th {
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+}
+
+.shadow {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rounded {
+  border-radius: 8px;
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.pagination-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.pagination a, .pagination span {
+  margin: 0 5px;
+  padding: 8px 12px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.pagination a:hover {
+  background-color: #e9ecef;
+  border-radius: 5px;
+}
+
+.pagination .current {
+  font-weight: bold;
+  color: #343a40;
+}
+
+.container {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.table-common {
+  .btn {
+    width: auto;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.8rem;
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1rem;
+    }
+
+    tbody tr td {
+      display: flex;
+      justify-content: space-between;
+
+      &:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+
+  @media (min-width: 768px) {
+    th, td {
+      padding: 10px;
+    }
+  }
+
+  @media (min-width: 992px) {
+    font-size: 1rem;
+  }
+}
+
+.table-cash-closes,
+.table-menu-items,
+.table-ventas,
+.table-cierre-caja,
+.table-resumen-caja,
+.table-cierre-detalle,
+.table-resumen-detalle,
+.table-detalles-venta {
+  @extend .table-common;
+}
+
+@media (max-width: 576px) {
+  .pagination {
+    margin: 0 auto;
+    width: 100%;
+    overflow-x: hidden;
+  }
+}
+
+.table-cierre-caja, .table-resumen-caja, .table-cierre-detalle, .table-resumen-detalle, .table-detalles-venta {
+  font-size: 1rem;
+  width: 100%;
+
+  th, td {
+    padding: 8px;
+    vertical-align: middle;
+  }
+
+  tfoot td {
+    padding: 8px;
+    font-size: 1rem;
+    vertical-align: middle;
+    text-align: right;
+  }
+
+  .btn {
+    width: auto;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+
+  @media (max-width: 576px) {
+    font-size: 0.8rem;
+
+    thead {
+      display: none;
+    }
+
+    tbody tr {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 1rem;
+    }
+
+    tbody tr td, tfoot td {
+      display: flex;
+      justify-content: space-between;
+
+      &:before {
+        content: attr(data-label);
+        font-weight: bold;
+        color: #333;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .table-resumen-detalle tfoot td:before {
+    color: #ffffff;
+  }
+}
+
+.sell-materials-label {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .sell-materials-table {
+    font-size: 0.8rem;
+  }
+
+  .sell-materials-label {
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .sell-materials-table thead {
+    display: none;
+  }
+
+  .sell-materials-table tbody tr {
+    display: block;
+    flex-direction: column;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 1rem;
+  }
+
+  .sell-materials-table tbody tr td {
+    display: block;
+    width: 100%;
+
+    &:before {
+      content: attr(data-label);
+      font-weight: bold;
+      color: #333;
+    }
+  }
+}

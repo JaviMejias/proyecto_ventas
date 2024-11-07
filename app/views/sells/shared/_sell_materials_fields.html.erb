@@ -1,0 +1,60 @@
+<div class="nested-form-wrapper" data-new-record="<%= f.object.new_record? %>">
+  <td>
+    <label for="<%= f.object_name %>_menu_item_id" class="sell-materials-label">Menu Item</label>
+    <%= f.select :menu_item_id, MenuItem.all.pluck(:name, :id), 
+      { include_blank: 'Seleccione' }, 
+      {
+        class: 'form-control menu-item-select slim-select',
+        data: {
+          controller: "slim-select",
+          action: "change->sell-materials#handleMenuItemChange",
+          sell_materials_target: "menuItem"
+        }
+      }
+    %>
+  </td>
+  <td>
+    <label for="<%= f.object_name %>_addons" class="sell-materials-label">Agregados</label>
+    <%=
+      f.select :addon_ids,
+      Addon.all.pluck(:name, :id),
+      { include_blank: false },
+      {
+        class: 'form-control slim-select-multiple',
+        multiple: true,
+        data: { controller: "slim-select", action: "change->sell-materials#setAddonMaxSelected", }
+      }
+    %>
+  </td>
+  <td>
+    <label for="<%= f.object_name %>_quantity" class="sell-materials-label">Cantidad</label>
+    <%=
+      f.text_field :quantity,
+      value: 0,
+      class: "form-control quantity",
+      data: {
+        action: "input->sell-materials#calculateTotalForRow"
+      }
+    %>
+  </td>
+  <td data-controller="price-formatter">
+    <label for="<%= f.object_name %>_price" class="sell-materials-label">Precio</label>
+    <%=
+      f.text_field :price,
+      value: 0,
+      class: "form-control price-field", 
+      data: {
+        "sell-materials-target": "priceField",
+        "price-formatter-target": "input",
+        action: "input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow"
+      }
+    %>
+  </td>
+  <td>
+    <label for="<%= f.object_name %>_total" class="sell-materials-label">Total</label>
+    <%= f.text_field :total, value: 0, class: "form-control", readonly: true %>
+  </td>
+  <td class="text-center">
+    <button type="button" class="btn btn-warning" data-action="sell-materials#removeRow">Eliminar</button>
+  </td>
+</template>

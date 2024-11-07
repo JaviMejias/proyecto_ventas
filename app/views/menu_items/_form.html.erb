@@ -1,0 +1,40 @@
+<div class="container my-4 p-4 bg-white rounded shadow">
+  <%= form_with(model: menu_item, local: true, data: { action: "submit->price-formatter#prepareSubmit" }) do |form| %>
+    <% if menu_item.errors.any? %>
+      <div class="alert alert-danger">
+        <h4><%= pluralize(menu_item.errors.count, "error impide", "errores impiden") %> que este ítem del menú se guardara:</h4>
+        <ul>
+          <% menu_item.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    
+    <h3 class="text-center mt-3">
+      <%= params[:action] == 'edit' ? "Editando #{form.object.name}" : "Nuevo Elemento" %>
+    </h3>
+    
+    <div class="row">
+      <div class="col-12 col-md-6 mb-3">
+        <%= form.label :name, 'Nombre', class: "form-label" %>
+        <%= form.text_field :name, class: "form-control", required: true %>
+      </div>
+      
+      <div class="col-12 col-md-6 mb-3" data-controller="price-formatter">
+        <%= form.label :price, 'Precio', class: "form-label" %>
+        <%= form.text_field :price, value: 0, class: "form-control", required: true, data: { "price-formatter-target": "input", action: "input->price-formatter#formatPrice" } %>
+      </div>
+
+      <div class="col-12 col-md-6 mb-3" data-controller="price-formatter">
+        <%= form.label :addon_quantity, 'Cantidad de Agregados', class: "form-label" %>
+        <%= form.text_field :addon_quantity, min: 0, required: true, class: "form-control", data: { "price-formatter-target": "input", action: "input->price-formatter#formatPrice" } %>
+      </div>
+    </div>
+    
+    <div class="d-flex justify-content-between mt-4">
+      <%= link_to "Volver", menu_items_path, class: "btn btn-secondary" %>
+      <%= form.submit "Guardar", class: "btn btn-primary" %>
+    </div>
+  <% end %>
+</div>
