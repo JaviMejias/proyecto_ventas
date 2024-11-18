@@ -57,7 +57,7 @@
             <td class="text-center text-muted" data-label="Monto Total">$<%= number_to_currency(total_value, unit: "", delimiter: ".", precision: 0) %></td>
             <td class="text-center" data-controller="price-formatter" data-label="Monto en Caja">
               <%=
-                number_field_tag "observed_#{type}",
+                text_field_tag "observed_#{type}",
                 nil,
                 value: 0,
                 class: "form-control",
