@@ -14,7 +14,6 @@ class MenuItemsController < ApplicationController
 
   def edit
     @menu_item = MenuItem.find(params[:id])
-    @menu_item.price = helpers.number_with_delimiter(@menu_item.price, delimiter: ".")
   end
 
   def create
