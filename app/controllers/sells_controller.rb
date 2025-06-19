@@ -44,22 +44,24 @@ class SellsController < ApplicationController
   end
 
   def transformed_params
-    params = sell_params
-    params[:total] = helpers.escape_chars_2(params[:total]) if params[:total].present?
+    transformed_hash = sell_params
 
-    sell_materials_attributes = params[:sell_materials_attributes].values
+    transformed_hash[:total] = helpers.escape_chars_2(transformed_hash[:total]) if transformed_hash[:total].present?
 
-    sell_materials_attributes.reject! do |att|
+    sell_materials_array = transformed_hash[:sell_materials_attributes].values
+
+    sell_materials_array.reject! do |att|
       att[:menu_item_id].blank? && att[:quantity].blank? && att[:price].blank?
     end
 
-    sell_materials_attributes.each do |att|
+    sell_materials_array.each do |att|
       att[:quantity] = helpers.escape_chars_2(att[:quantity]) if att[:quantity].present?
       att[:price] = helpers.escape_chars_2(att[:price]) if att[:price].present?
       att[:total] = helpers.escape_chars_2(att[:total]) if att[:total].present?
     end
 
-    params[:sell_materials_attributes] = sell_materials_attributes.map(&:to_h)
-    params
+    transformed_hash[:sell_materials_attributes] = sell_materials_array
+
+    transformed_hash
   end
 end

@@ -29,6 +29,6 @@ class CashClose < ApplicationRecord
   private
 
   def verify_related_sells
-    errors.add(Error: 'No se puede guardar una venta vacía.') if sells.empty?
+    errors.add(:Error, 'No se puede guardar un cierre de caja sin ventas.') if sells.empty?
   end
 end

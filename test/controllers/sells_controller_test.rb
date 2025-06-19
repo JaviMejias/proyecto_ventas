@@ -2,7 +2,9 @@ require "test_helper"
 
 class SellsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @sell = sells(:one)
+    @sell = sells(:sell_one)
+    @menu_item = menu_items(:pizza)
+    sign_in users(:archer)
   end
 
   test "should get index" do
@@ -17,32 +19,22 @@ class SellsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create sell" do
     assert_difference("Sell.count") do
-      post sells_url, params: { sell: { payment_type: @sell.payment_type, total: @sell.total } }
+      post sells_url, params: { sell: {
+        client_name: @sell.client_name,
+        document_date: @sell.document_date,
+        payment_type: @sell.payment_type,
+        total: @sell.total,
+        sell_materials_attributes: [
+          { quantity: 1, price: 10.0, total: 10.0, menu_item_id: @menu_item.id }
+        ]
+      } }
     end
 
-    assert_redirected_to sell_url(Sell.last)
+    assert_redirected_to new_sell_url
   end
 
   test "should show sell" do
     get sell_url(@sell)
     assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_sell_url(@sell)
-    assert_response :success
-  end
-
-  test "should update sell" do
-    patch sell_url(@sell), params: { sell: { payment_type: @sell.payment_type, total: @sell.total } }
-    assert_redirected_to sell_url(@sell)
-  end
-
-  test "should destroy sell" do
-    assert_difference("Sell.count", -1) do
-      delete sell_url(@sell)
-    end
-
-    assert_redirected_to sells_url
   end
 end

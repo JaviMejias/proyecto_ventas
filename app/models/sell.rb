@@ -4,7 +4,7 @@ class Sell < ApplicationRecord
   has_many :sell_materials, dependent: :destroy
   accepts_nested_attributes_for :sell_materials, allow_destroy: true
 
-  enum payment_type: { efectivo: 0, tarjeta: 1, transferencia: 2 }
+  enum :payment_type, { efectivo: 0, tarjeta: 1, transferencia: 2 }
 
   scope :open_sells, -> { where(cash_close_id: nil) }
 

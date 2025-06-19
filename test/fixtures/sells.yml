@@ -1,9 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+sell_one:
+  total: 100
+  payment_type: 0
+  client_name: "Cliente Test"
+  document_date: <%= Date.current %>
 
-one:
-  total: 1
+sell_two:
+  total: 200
   payment_type: 1
-
-two:
-  total: 1
-  payment_type: 1
+  client_name: "Otro Cliente"
+  document_date: <%= Date.current %>

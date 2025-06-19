@@ -1,5 +1,5 @@
 class CashClosesController < ApplicationController
-  before_action :set_cash_close, only: %i[ show edit update destroy ]
+  before_action :set_cash_close, only: %i[ show destroy ]
 
   def index
     @q = CashClose.ransack(params[:q])
