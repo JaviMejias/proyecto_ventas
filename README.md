@@ -33,6 +33,7 @@ Este proyecto es una aplicación web integral construida con Ruby on Rails, dise
     * Ruby (versión 3.3.5)
     * PostgreSQL (como base de datos)
 * **Frontend:**
+    * Bootstrap 5
     * HTML, CSS
     * JavaScript
     * jQuery
