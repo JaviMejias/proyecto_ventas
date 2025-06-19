@@ -4,7 +4,6 @@ export default class extends Controller {
   static targets = ["observed", "difference", "hidden", "totalSales"]
 
   connect() {
-    console.log("CashCloseController conectado")
   }
 
   updateDifference(event) {

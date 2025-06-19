@@ -11,7 +11,8 @@ export default class extends Controller {
       settings: {
         contentPosition: 'absolute',
         openPosition: 'auto',
-        placeholder: 'Seleccione',
+        placeholderText: 'Seleccione',
+        searchPlaceholder: 'Buscar',
         closeOnSelect: !isMultiple,
       }
     })

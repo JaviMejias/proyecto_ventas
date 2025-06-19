@@ -9,7 +9,10 @@
           <%= link_to 'Carta', menu_items_path, class: "nav-link #{'active' if controller_name == 'menu_items'}" %>
         </li>
         <li class="nav-item">
-          <%= link_to 'Ventas', new_sell_path, class: "nav-link #{'active' if controller_name == 'sells'}" %>
+          <%= link_to 'Ventas', new_sell_path, class: "nav-link #{'active' if controller_name == 'sells' && ['new', 'create'].include?(params[:action])}" %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'Historial Ventas', sells_path, class: "nav-link #{'active' if controller_name == 'sells' && ['index', 'show'].include?(params[:action])}" %>
         </li>
         <li class="nav-item">
           <%= link_to 'Cierre de Caja', cash_closes_path, class: "nav-link #{'active' if controller_name == 'cash_closes'}" %>
