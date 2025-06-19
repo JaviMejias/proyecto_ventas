@@ -2,7 +2,8 @@ require "application_system_test_case"
 
 class MenuItemsTest < ApplicationSystemTestCase
   setup do
-    @menu_item = menu_items(:one)
+    @menu_item = menu_items(:pizza)
+    sign_in users(:archer)
   end
 
   test "visiting the index" do

@@ -1,8 +1,9 @@
 require "application_system_test_case"
 
 class CashClosesTest < ApplicationSystemTestCase
-  setup do
+   setup do
     @cash_close = cash_closes(:one)
+    sign_in users(:archer)
   end
 
   test "visiting the index" do

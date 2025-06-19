@@ -2,7 +2,9 @@ require "application_system_test_case"
 
 class SellsTest < ApplicationSystemTestCase
   setup do
-    @sell = sells(:one)
+    @sell = sells(:sell_one)
+    @menu_item = menu_items(:pizza)
+    sign_in users(:archer)
   end
 
   test "visiting the index" do

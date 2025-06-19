@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :cash_closes, except: [:edit, :update]
+  resources :cash_closes, except: [ :edit, :update ]
   resources :addons, only: [ :create, :index, :destroy ]
   resources :sells, except: %i[edit destroy]
   resources :menu_items, except: %i[show] do

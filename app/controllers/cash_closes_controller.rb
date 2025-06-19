@@ -25,10 +25,10 @@ class CashClosesController < ApplicationController
   def create
     @cash_close = CashClose.new(transformed_params)
     @cash_close.date = Date.today
-  
+
     unclosed_sells = Sell.open_sells.group_by(&:payment_type)
     @cash_close.sells = unclosed_sells.values.flatten
-  
+
     if @cash_close.save
       Sell.open_sells.update_all(cash_close_id: @cash_close.id)
       redirect_to cash_closes_path, notice: "Cierre de caja creado exitosamente."
