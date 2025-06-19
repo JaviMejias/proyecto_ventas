@@ -5,3 +5,20 @@ pizza:
 pasta:
   name: "Spaghetti Bolognese"
   price: 15.00
+
+pollo:
+  id: 1
+  name: "Pollo"
+  price: 1000
+
+costillar:
+  name: "Costillar Cerdo"
+  price: 4.500
+
+pechuga:
+  name: "Pechuga Pollo"
+  price: 6.500
+
+item_para_eliminar:
+  name: "Hamburguesa Sin Ventas"
+  price: 8.000

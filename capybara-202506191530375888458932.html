@@ -1,0 +1,235 @@
+<html><head>
+    <title>Proyecto Ventas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    
+    
+
+    
+
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="/assets/application-ad089fbf1ce6f805489d0e44f1b77064923cf6f2809b121cc8fee690080f5692.css" data-turbo-track="reload">
+    <script type="importmap" data-turbo-track="reload">{
+  "imports": {
+    "application": "/assets/application-db369cb463439369d33d9cd9a9da334ffe38dff12efc5fa60b9a25e8f800a527.js",
+    "@hotwired/turbo-rails": "/assets/turbo.min-4cfe7c6aaeb9120821760aa53763dff54fbc561e500da6482fc43c54c7384929.js",
+    "@hotwired/stimulus": "/assets/@hotwired--stimulus-d7988e16a93333941ba2b5aae02a3b7131f9ec809f9619a876aa2180ab9b0767.js",
+    "@hotwired/stimulus-loading": "/assets/stimulus-loading-3576ce92b149ad5d6959438c6f291e2426c86df3b874c525b30faad51b0d96b3.js",
+    "@rails/request.js": "/assets/@rails--request.js-f6b93d67a941693dfa8544a711ffc6113d60cda50a540d35bb080a0bf899e94a.js",
+    "toastr": "/assets/toastr-c87f33ebbd55726ca000d37f4a72c8c0ad14cf51e78a1fd465f1d3d50e9fdbf9.js",
+    "jquery": "/assets/jquery-32a652f6e1745969bc3d4dc2c928b2c375483549b9c64adfbf9258cc7d00dd6e.js",
+    "slim-select": "/assets/slim-select-a771d400ed1f574639c90e5bf4500eb93b003de605a7ca3471f8cbdbc6ac4758.js",
+    "@stimulus-components/rails-nested-form": "/assets/@stimulus-components--rails-nested-form-955c600f60ab15bd7f0de45d4120fc8bc8548dc435de9421c342ddcae0070fa5.js",
+    "controllers/addons_controller": "/assets/controllers/addons_controller-6209668e5a8f5074eacd4fa2a03b9eb7ab35d251ad079bffa8d63604b1a40dec.js",
+    "controllers/application": "/assets/controllers/application-0743e627dfd34a76a1ca436604501388702c86c9236ae317004173dc7f881d47.js",
+    "controllers/cash_close_controller": "/assets/controllers/cash_close_controller-1e17895cb2e323d21df1cde6e0a6a47b659b955eee676d69fd4be34d99906fe7.js",
+    "controllers/flash_controller": "/assets/controllers/flash_controller-0413b314b7af5fa328313746e085a71a0825e831d9273e401837b9342c6fb93a.js",
+    "controllers": "/assets/controllers/index-0583cc7941de908e9328740b8e5aa487ac379b1cb55143541f6e09683f6e1185.js",
+    "controllers/menu_items_controller": "/assets/controllers/menu_items_controller-fab49addef862146fce3a058e790b791e3690628c08ae6361e68340964f63364.js",
+    "controllers/nested_form_controller": "/assets/controllers/nested_form_controller-7dfc76200ccec469f30cecfa46ec2aca983610ae8a907f0fe64b2d8f04ad256c.js",
+    "controllers/price_formatter_controller": "/assets/controllers/price_formatter_controller-b4fc41988fd88f582877519d11f824f2c889193b4b8d040421de0726046797d9.js",
+    "controllers/sell_materials_controller": "/assets/controllers/sell_materials_controller-0df6c45e918ce32381368302c8b6fb18a5897fe25744b38b1adab83f084f6756.js",
+    "controllers/slim_select_controller": "/assets/controllers/slim_select_controller-1fd615138a6ea519000636d3dafeae3de1d0c468057675200a3e605df42aa483.js"
+  }
+}</script>
+<link rel="modulepreload" href="/assets/application-db369cb463439369d33d9cd9a9da334ffe38dff12efc5fa60b9a25e8f800a527.js">
+<link rel="modulepreload" href="/assets/turbo.min-4cfe7c6aaeb9120821760aa53763dff54fbc561e500da6482fc43c54c7384929.js">
+<link rel="modulepreload" href="/assets/@hotwired--stimulus-d7988e16a93333941ba2b5aae02a3b7131f9ec809f9619a876aa2180ab9b0767.js">
+<link rel="modulepreload" href="/assets/stimulus-loading-3576ce92b149ad5d6959438c6f291e2426c86df3b874c525b30faad51b0d96b3.js">
+<link rel="modulepreload" href="/assets/@rails--request.js-f6b93d67a941693dfa8544a711ffc6113d60cda50a540d35bb080a0bf899e94a.js">
+<link rel="modulepreload" href="/assets/toastr-c87f33ebbd55726ca000d37f4a72c8c0ad14cf51e78a1fd465f1d3d50e9fdbf9.js">
+<link rel="modulepreload" href="/assets/jquery-32a652f6e1745969bc3d4dc2c928b2c375483549b9c64adfbf9258cc7d00dd6e.js">
+<link rel="modulepreload" href="/assets/slim-select-a771d400ed1f574639c90e5bf4500eb93b003de605a7ca3471f8cbdbc6ac4758.js">
+<link rel="modulepreload" href="/assets/@stimulus-components--rails-nested-form-955c600f60ab15bd7f0de45d4120fc8bc8548dc435de9421c342ddcae0070fa5.js">
+<link rel="modulepreload" href="/assets/controllers/addons_controller-6209668e5a8f5074eacd4fa2a03b9eb7ab35d251ad079bffa8d63604b1a40dec.js">
+<link rel="modulepreload" href="/assets/controllers/application-0743e627dfd34a76a1ca436604501388702c86c9236ae317004173dc7f881d47.js">
+<link rel="modulepreload" href="/assets/controllers/cash_close_controller-1e17895cb2e323d21df1cde6e0a6a47b659b955eee676d69fd4be34d99906fe7.js">
+<link rel="modulepreload" href="/assets/controllers/flash_controller-0413b314b7af5fa328313746e085a71a0825e831d9273e401837b9342c6fb93a.js">
+<link rel="modulepreload" href="/assets/controllers/index-0583cc7941de908e9328740b8e5aa487ac379b1cb55143541f6e09683f6e1185.js">
+<link rel="modulepreload" href="/assets/controllers/menu_items_controller-fab49addef862146fce3a058e790b791e3690628c08ae6361e68340964f63364.js">
+<link rel="modulepreload" href="/assets/controllers/nested_form_controller-7dfc76200ccec469f30cecfa46ec2aca983610ae8a907f0fe64b2d8f04ad256c.js">
+<link rel="modulepreload" href="/assets/controllers/price_formatter_controller-b4fc41988fd88f582877519d11f824f2c889193b4b8d040421de0726046797d9.js">
+<link rel="modulepreload" href="/assets/controllers/sell_materials_controller-0df6c45e918ce32381368302c8b6fb18a5897fe25744b38b1adab83f084f6756.js">
+<link rel="modulepreload" href="/assets/controllers/slim_select_controller-1fd615138a6ea519000636d3dafeae3de1d0c468057675200a3e605df42aa483.js">
+<script type="module">import "application"</script>
+  </head>
+
+  <body data-controller="flash sells" data-success="" data-error="">
+
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link " href="/menu_items">Carta</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/sells/new">Ventas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/sells">Historial Ventas</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link " href="/cash_closes">Cierre de Caja</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+    <div class="container my-4 p-4 bg-white rounded shadow" data-controller="sell-materials nested-form">
+  <form data-controller="nested-form" data-nested-form-wrapper-selector-value=".nested-form-wrapper" action="/sells" accept-charset="UTF-8" method="post">    
+    <div class="text-end mb-3">
+      <a class="btn btn-primary" href="/sells">Historial Ventas</a>
+    </div>
+    <div class="nested-form-wrapper" data-new-record="true">
+  </div><table class="table table-striped table-hover table-bordered sell-materials-table">
+      <thead>
+        <tr>
+          <th>Menu Item</th>
+          <th>Agregados</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+          <th>Total</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody data-nested-form-target="target">
+        
+          <tr class="sell-materials-row">
+            <td>
+    <label for="sell[sell_materials_attributes][0]_menu_item_id" class="sell-materials-label">Menu Item</label>
+    <select class="form-control menu-item-select slim-select" data-controller="slim-select" data-action="change->sell-materials#handleMenuItemChange" data-sell-materials-target="menuItem" name="sell[sell_materials_attributes][0][menu_item_id]" id="sell_sell_materials_attributes_0_menu_item_id" data-id="ss-dr4jz47k" tabindex="-1" aria-hidden="true" style="display: none;" data-max-addons="0"><option id="4injelkm" value="">Seleccione</option><option id="ydh9efec" value="266175090">Pizza Margherita</option><option id="ubaps7po" value="456899715">Spaghetti Bolognese</option><option id="5gkuqzgn" value="1">Pollo</option><option id="4flj9xdy" value="569228174">Costillar Cerdo</option><option id="ygwv8jmg" value="185484761">Pechuga Pollo</option><option id="w8qi3d3g" value="60147990">Hamburguesa Sin Ventas</option></select><div data-id="ss-dr4jz47k" aria-label="Combobox" tabindex="0" class="ss-main form-control menu-item-select slim-select" role="combobox" aria-haspopup="listbox" aria-controls="" aria-expanded="false" aria-activedescendant="4injelkm"><div class="ss-values"><div class="ss-single">Seleccione</div></div><div class="ss-deselect ss-hide"><svg viewBox="0 0 100 100"><path d="M10,10 L90,90 M10,90 L90,10"></path></svg></div><svg class="ss-arrow" viewBox="0 0 100 100"><path d="M10,30 L50,70 L90,30"></path></svg></div>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][0]_addons" class="sell-materials-label">Agregados</label>
+    <input name="sell[sell_materials_attributes][0][addon_ids][]" type="hidden" value="" autocomplete="off"><select class="form-control slim-select-multiple" multiple="multiple" data-controller="slim-select" data-action="change->sell-materials#setAddonMaxSelected" name="sell[sell_materials_attributes][0][addon_ids][]" id="sell_sell_materials_attributes_0_addon_ids" data-id="ss-jcu8plpj" tabindex="-1" aria-hidden="true" style="display: none;" disabled=""><option id="5k4t774m" value="980190962">MyString</option><option id="hfru74xy" value="298486374">MyString</option></select><div data-id="ss-jcu8plpj" aria-label="Combobox" tabindex="0" class="ss-main form-control slim-select-multiple ss-disabled" role="combobox" aria-haspopup="listbox" aria-controls="" aria-expanded="false"><div class="ss-values"><div class="ss-placeholder">Seleccione</div></div><div class="ss-deselect ss-hide"><svg viewBox="0 0 100 100"><path d="M10,10 L90,90 M10,90 L90,10"></path></svg></div><svg class="ss-arrow" viewBox="0 0 100 100"><path d="M10,30 L50,70 L90,30"></path></svg></div>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][0]_quantity" class="sell-materials-label">Cantidad</label>
+    <input value="0" class="form-control quantity" data-action="input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][0][quantity]" id="sell_sell_materials_attributes_0_quantity">
+  </td>
+  <td data-controller="price-formatter">
+    <label for="sell[sell_materials_attributes][0]_price" class="sell-materials-label">Precio</label>
+    <input value="0" class="form-control price-field" data-sell-materials-target="priceField" data-price-formatter-target="input" data-action="input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][0][price]" id="sell_sell_materials_attributes_0_price">
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][0]_total" class="sell-materials-label">Total</label>
+    <input value="0" class="form-control" readonly="readonly" type="text" name="sell[sell_materials_attributes][0][total]" id="sell_sell_materials_attributes_0_total">
+  </td>
+  <td class="text-center">
+    <button type="button" class="btn btn-warning" data-action="sell-materials#removeRow">Eliminar</button>
+  </td>
+
+          </tr>
+        <template data-nested-form-target="template">
+          
+            <tr class="sell-materials-row">
+              <td>
+    <label for="sell[sell_materials_attributes][1750361436]_menu_item_id" class="sell-materials-label">Menu Item</label>
+    <select class="form-control menu-item-select slim-select" data-controller="slim-select" data-action="change->sell-materials#handleMenuItemChange" data-sell-materials-target="menuItem" name="sell[sell_materials_attributes][1750361436][menu_item_id]" id="sell_sell_materials_attributes_1750361436_menu_item_id"><option value="">Seleccione</option>
+<option value="266175090">Pizza Margherita</option>
+<option value="456899715">Spaghetti Bolognese</option>
+<option value="1">Pollo</option>
+<option value="569228174">Costillar Cerdo</option>
+<option value="185484761">Pechuga Pollo</option>
+<option value="60147990">Hamburguesa Sin Ventas</option></select>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_addons" class="sell-materials-label">Agregados</label>
+    <input name="sell[sell_materials_attributes][1750361436][addon_ids][]" type="hidden" value="" autocomplete="off"><select class="form-control slim-select-multiple" multiple="multiple" data-controller="slim-select" data-action="change->sell-materials#setAddonMaxSelected" name="sell[sell_materials_attributes][1750361436][addon_ids][]" id="sell_sell_materials_attributes_1750361436_addon_ids"><option value="980190962">MyString</option>
+<option value="298486374">MyString</option></select>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_quantity" class="sell-materials-label">Cantidad</label>
+    <input value="0" class="form-control quantity" data-action="input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][1750361436][quantity]" id="sell_sell_materials_attributes_1750361436_quantity">
+  </td>
+  <td data-controller="price-formatter">
+    <label for="sell[sell_materials_attributes][1750361436]_price" class="sell-materials-label">Precio</label>
+    <input value="0" class="form-control price-field" data-sell-materials-target="priceField" data-price-formatter-target="input" data-action="input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][1750361436][price]" id="sell_sell_materials_attributes_1750361436_price">
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_total" class="sell-materials-label">Total</label>
+    <input value="0" class="form-control" readonly="readonly" type="text" name="sell[sell_materials_attributes][1750361436][total]" id="sell_sell_materials_attributes_1750361436_total">
+  </td>
+  <td class="text-center">
+    <button type="button" class="btn btn-warning" data-action="sell-materials#removeRow">Eliminar</button>
+  </td>
+</tr><div class="nested-form-wrapper" data-new-record="true">
+  </div></template>
+            
+        
+      
+          
+            <tr class="sell-materials-row">
+              <td>
+    <label for="sell[sell_materials_attributes][1750361436]_menu_item_id" class="sell-materials-label">Menu Item</label>
+    <select class="form-control menu-item-select slim-select" data-controller="slim-select" data-action="change->sell-materials#handleMenuItemChange" data-sell-materials-target="menuItem" name="sell[sell_materials_attributes][1][menu_item_id]" id="sell_sell_materials_attributes_1_menu_item_id" data-id="ss-ny7z4eyw" tabindex="-1" aria-hidden="true" style="display: none;"><option value="">Seleccione</option>
+<option value="266175090">Pizza Margherita</option>
+<option value="456899715">Spaghetti Bolognese</option>
+<option value="1">Pollo</option>
+<option value="569228174">Costillar Cerdo</option>
+<option value="185484761">Pechuga Pollo</option>
+<option value="60147990">Hamburguesa Sin Ventas</option></select><div data-id="ss-ny7z4eyw" aria-label="Combobox" tabindex="0" class="ss-main form-control menu-item-select slim-select" role="combobox" aria-haspopup="listbox" aria-controls="" aria-expanded="false" aria-activedescendant="fuztrpzh"><div class="ss-values"><div class="ss-single">Seleccione</div></div><div class="ss-deselect ss-hide"><svg viewBox="0 0 100 100"><path d="M10,10 L90,90 M10,90 L90,10"></path></svg></div><svg class="ss-arrow" viewBox="0 0 100 100"><path d="M10,30 L50,70 L90,30"></path></svg></div>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_addons" class="sell-materials-label">Agregados</label>
+    <input name="sell[sell_materials_attributes][1][addon_ids][]" type="hidden" value="" autocomplete="off" id=""><select class="form-control slim-select-multiple" multiple="multiple" data-controller="slim-select" data-action="change->sell-materials#setAddonMaxSelected" name="sell[sell_materials_attributes][1][addon_ids][]" id="sell_sell_materials_attributes_1_addon_ids" data-id="ss-tkqzxi0b" tabindex="-1" aria-hidden="true" disabled="" style="display: none;"><option value="980190962">MyString</option>
+<option value="298486374">MyString</option></select><div data-id="ss-tkqzxi0b" aria-label="Combobox" tabindex="0" class="ss-main form-control slim-select-multiple ss-disabled" role="combobox" aria-haspopup="listbox" aria-controls="" aria-expanded="false"><div class="ss-values"><div class="ss-placeholder">Seleccione</div></div><div class="ss-deselect ss-hide"><svg viewBox="0 0 100 100"><path d="M10,10 L90,90 M10,90 L90,10"></path></svg></div><svg class="ss-arrow" viewBox="0 0 100 100"><path d="M10,30 L50,70 L90,30"></path></svg></div>
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_quantity" class="sell-materials-label">Cantidad</label>
+    <input value="0" class="form-control quantity" data-action="input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][1][quantity]" id="sell_sell_materials_attributes_1_quantity">
+  </td>
+  <td data-controller="price-formatter">
+    <label for="sell[sell_materials_attributes][1750361436]_price" class="sell-materials-label">Precio</label>
+    <input value="0" class="form-control price-field" data-sell-materials-target="priceField" data-price-formatter-target="input" data-action="input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow" type="text" name="sell[sell_materials_attributes][1][price]" id="sell_sell_materials_attributes_1_price">
+  </td>
+  <td>
+    <label for="sell[sell_materials_attributes][1750361436]_total" class="sell-materials-label">Total</label>
+    <input value="0" class="form-control" readonly="readonly" type="text" name="sell[sell_materials_attributes][1][total]" id="sell_sell_materials_attributes_1_total">
+  </td>
+  <td class="text-center">
+    <button type="button" class="btn btn-warning" data-action="sell-materials#removeRow">Eliminar</button>
+  </td>
+</tr><div class="nested-form-wrapper" data-new-record="true">
+  </div></tbody>
+    </table>
+    <button type="button" class="btn btn-success" data-action="nested-form#add">Agregar Linea</button>
+    <hr>
+    <div class="row">
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <label class="form-label" for="sell_client_name">Nombre Cliente</label>
+        <input placeholder="Nombre..." class="form-control" required="required" type="text" name="sell[client_name]" id="sell_client_name">
+      </div>
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <label class="form-label" for="sell_payment_type">Tipo de Pago</label>
+        <select class="form-control" name="sell[payment_type]" id="sell_payment_type"><option value="efectivo">Efectivo</option>
+<option value="tarjeta">Tarjeta</option>
+<option value="transferencia">Transferencia</option></select>
+      </div>
+      <div class="col-12 col-md-6 mb-3 offset-md-6">
+        <label class="form-label" for="sell_total">Total</label>
+        <input class="form-control" data-sell-materials-target="totalField" readonly="readonly" type="text" name="sell[total]" id="sell_total">
+      </div>
+    </div>
+    <div class="d-flex justify-content-end mt-4">
+      <input type="submit" name="commit" value="Guardar" class="btn btn-primary" data-disable-with="Guardar">
+    </div>
+</form></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  
+
+<div data-id="ss-dr4jz47k" class="ss-content form-control menu-item-select slim-select" role="listbox"><div class="ss-search"><input type="search" placeholder="Buscar" tabindex="-1" aria-label="Buscar" autocapitalize="off" autocomplete="off" autocorrect="off"></div><div class="ss-list"><div data-id="4injelkm" id="4injelkm" class="ss-option ss-selected" role="option" aria-selected="true">Seleccione</div><div data-id="ydh9efec" id="ydh9efec" class="ss-option" role="option" aria-selected="false">Pizza Margherita</div><div data-id="ubaps7po" id="ubaps7po" class="ss-option" role="option" aria-selected="false">Spaghetti Bolognese</div><div data-id="5gkuqzgn" id="5gkuqzgn" class="ss-option" role="option" aria-selected="false">Pollo</div><div data-id="4flj9xdy" id="4flj9xdy" class="ss-option" role="option" aria-selected="false">Costillar Cerdo</div><div data-id="ygwv8jmg" id="ygwv8jmg" class="ss-option" role="option" aria-selected="false">Pechuga Pollo</div><div data-id="w8qi3d3g" id="w8qi3d3g" class="ss-option" role="option" aria-selected="false">Hamburguesa Sin Ventas</div></div></div><div data-id="ss-jcu8plpj" class="ss-content form-control slim-select-multiple" role="listbox"><div class="ss-search"><input type="search" placeholder="Buscar" tabindex="-1" aria-label="Buscar" autocapitalize="off" autocomplete="off" autocorrect="off" disabled=""></div><div class="ss-list"><div data-id="5k4t774m" id="5k4t774m" class="ss-option" role="option" aria-selected="false">MyString</div><div data-id="hfru74xy" id="hfru74xy" class="ss-option" role="option" aria-selected="false">MyString</div></div></div><div data-id="ss-ny7z4eyw" class="ss-content form-control menu-item-select slim-select" role="listbox"><div class="ss-search"><input type="search" placeholder="Buscar" tabindex="-1" aria-label="Buscar" autocapitalize="off" autocomplete="off" autocorrect="off"></div><div class="ss-list"><div data-id="fuztrpzh" id="fuztrpzh" class="ss-option ss-selected" role="option" aria-selected="true">Seleccione</div><div data-id="646981cc" id="646981cc" class="ss-option" role="option" aria-selected="false">Pizza Margherita</div><div data-id="jxyifers" id="jxyifers" class="ss-option" role="option" aria-selected="false">Spaghetti Bolognese</div><div data-id="jpviofay" id="jpviofay" class="ss-option" role="option" aria-selected="false">Pollo</div><div data-id="56p74t2t" id="56p74t2t" class="ss-option" role="option" aria-selected="false">Costillar Cerdo</div><div data-id="omwkmbnu" id="omwkmbnu" class="ss-option" role="option" aria-selected="false">Pechuga Pollo</div><div data-id="qe74da4e" id="qe74da4e" class="ss-option" role="option" aria-selected="false">Hamburguesa Sin Ventas</div></div></div><div data-id="ss-tkqzxi0b" class="ss-content form-control slim-select-multiple" role="listbox"><div class="ss-search"><input type="search" placeholder="Buscar" tabindex="-1" aria-label="Buscar" autocapitalize="off" autocomplete="off" autocorrect="off" disabled=""></div><div class="ss-list"><div data-id="guc4q1p6" id="guc4q1p6" class="ss-option" role="option" aria-selected="false">MyString</div><div data-id="ogztl1j8" id="ogztl1j8" class="ss-option" role="option" aria-selected="false">MyString</div></div></div></body></html>

@@ -53,7 +53,7 @@ group :development, :test do
   gem "factory_bot_rails"
   gem "faker"
   gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'launchy'
 end
 
 group :development do

@@ -2,43 +2,55 @@ require "application_system_test_case"
 
 class MenuItemsTest < ApplicationSystemTestCase
   setup do
-    @menu_item = menu_items(:pizza)
+    @menu_item = menu_items(:pollo)
+    @menu_item_to_destroy = menu_items(:item_para_eliminar)
     sign_in users(:archer)
   end
 
   test "visiting the index" do
     visit menu_items_url
-    assert_selector "h1", text: "Menu items"
+    assert_selector "h1", text: "Carta"
+    assert_text "Pollo" 
   end
 
   test "should create menu item" do
     visit menu_items_url
-    click_on "New menu item"
+    click_on "Agregar elemento al Menú" # Correcto
 
-    fill_in "Name", with: @menu_item.name
-    fill_in "Price", with: @menu_item.price
-    click_on "Create Menu item"
+    # Asegúrate de que los labels "Nombre" y "Precio" sean exactos o usa los IDs/names.
+    # Si el label es "Name" o "Price" o el ID es "menu_item_name", etc.
+    fill_in "Nombre", with: "Nuevo Plato Test"
+    fill_in "Precio", with: 9999
 
-    assert_text "Menu item was successfully created"
-    click_on "Back"
+    # ¡CORREGIR ESTO! Casi seguro es "Guardar"
+    click_on "Guardar" # <<--- Cambiar "Crear Menu item" por el texto exacto
+
+    assert_text "Agregado al menú correctamente." # Confirma este mensaje de éxito
   end
 
   test "should update Menu item" do
-    visit menu_item_url(@menu_item)
-    click_on "Edit this menu item", match: :first
+    visit menu_items_url
+    click_on @menu_item.name # Clickea en el nombre del ítem para editarlo
 
-    fill_in "Name", with: @menu_item.name
-    fill_in "Price", with: @menu_item.price
-    click_on "Update Menu item"
+    # Asegúrate de que "Nombre" y "Precio" sean los labels exactos o usa sus IDs/Names
+    fill_in "Nombre", with: "#{@menu_item.name} Actualizado"
+    fill_in "Precio", with: @menu_item.price + 1000
 
-    assert_text "Menu item was successfully updated"
-    click_on "Back"
+    # ¡AJUSTA ESTE TEXTO! Podría ser "Guardar", "Actualizar", "Actualizar Elemento", etc.
+    click_on "Guardar" # o el texto exacto del botón de actualización
+
+    assert_text "Elemento actualizado correctamente." # Este ya lo corregimos
   end
 
   test "should destroy Menu item" do
-    visit menu_item_url(@menu_item)
-    click_on "Destroy this menu item", match: :first
+    visit menu_items_url
+    within("tr", text: @menu_item_to_destroy.name) do
+      click_on "Eliminar"
+    end
+    accept_confirm # Esto ya está para manejar la alerta
 
-    assert_text "Menu item was successfully destroyed"
+    # ¡CORREGIDO! Usar el mensaje de éxito real de tu aplicación
+    assert_text "Elemento eliminado correctamente."
+    assert_no_text @menu_item_to_destroy.name
   end
 end

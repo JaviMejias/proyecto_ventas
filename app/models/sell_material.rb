@@ -5,4 +5,7 @@ class SellMaterial < ApplicationRecord
   has_many :addons, through: :sell_material_addons
 
   accepts_nested_attributes_for :sell_material_addons, allow_destroy: true
+
+  validates :menu_item, presence: true
+  validates :quantity, presence: true, numericality: { greater_than: 0 }
 end
