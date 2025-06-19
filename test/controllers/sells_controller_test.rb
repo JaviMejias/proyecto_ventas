@@ -24,9 +24,9 @@ class SellsControllerTest < ActionDispatch::IntegrationTest
         document_date: @sell.document_date,
         payment_type: @sell.payment_type,
         total: @sell.total,
-        sell_materials_attributes: [
-          { quantity: 1, price: 10.0, total: 10.0, menu_item_id: @menu_item.id }
-        ]
+        sell_materials_attributes: {
+          "0": { quantity: 1, price: 10.0, total: 10.0, menu_item_id: @menu_item.id }
+        }
       } }
     end
 
