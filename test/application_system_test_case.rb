@@ -9,7 +9,7 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   options.add_argument("--headless=new") # Para versiones recientes de Chrome
 
   # ¡Esta es la línea crucial! Le dice a Selenium dónde encontrar el binario del navegador.
-  options.binary = '/usr/bin/chromium-browser' # <-- Usamos la ruta que confirmaste
+  options.binary = "/usr/bin/chromium-browser" # <-- Usamos la ruta que confirmaste
 
   # Registra el driver de Capybara.
   # Capybara/Selenium ahora sabe dónde está el chromedriver (en tu PATH)
@@ -23,5 +23,5 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   end
 
   # Usa el driver que acabamos de registrar
-  driven_by :headless_chrome, screen_size: [1400, 1400]
+  driven_by :headless_chrome, screen_size: [ 1400, 1400 ]
 end

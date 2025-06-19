@@ -10,7 +10,7 @@ class MenuItemsTest < ApplicationSystemTestCase
   test "visiting the index" do
     visit menu_items_url
     assert_selector "h1", text: "Carta"
-    assert_text "Pollo" 
+    assert_text "Pollo"
   end
 
   test "should create menu item" do

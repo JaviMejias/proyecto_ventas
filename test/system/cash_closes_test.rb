@@ -16,7 +16,7 @@ class CashClosesTest < ApplicationSystemTestCase
     click_on "Nuevo Cierre de Caja"
 
     # ¡CORREGIDO! Usamos el ID exacto "observed_cash"
-    fill_in "observed_cash", with: 10000 
+    fill_in "observed_cash", with: 10000
 
     click_on "Crear Cierre de Caja" # Confirma que este es el texto del botón final
 
