@@ -1,27 +1,49 @@
-<div class="modal fade" id="addonsModal" tabindex="-1" aria-labelledby="addonsModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addonsModalLabel">Agregar Nuevos Agregados</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="fixed inset-0 z-50 overflow-y-auto opacity-0 pointer-events-none transition-opacity duration-300"
+     id="addonsModal" aria-labelledby="addonsModalLabel" aria-hidden="true" 
+     data-modal-target="container"
+     data-action="transitionend->modal#onTransitionEndShowing">
+  <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300"
+       data-action="click->modal#close" data-modal-target="backdrop">
+  </div>
+  <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+    <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full
+                opacity-0 scale-95 duration-300 ease-out"
+         data-modal-target="panel"
+         role="dialog" aria-modal="true" aria-labelledby="addonsModalLabel">
+      <div class="bg-gray-100 px-6 py-4 flex justify-between items-center border-b border-gray-200">
+        <h3 class="text-xl font-semibold text-gray-800" id="addonsModalLabel">Gestionar Agregados</h3>
+        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-1" data-action="click->modal#close" aria-label="Cerrar">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
-      <div class="modal-body" data-controller="addons">
+      <div class="bg-white px-6 pt-5 pb-6" data-controller="addons">
         <%= form_with(url: addons_path, remote: true, id: "new-addon-form", data: { action: "submit->addons#submitForm", addons_target: "form" }) do |form| %>
           <div id="addon-rows" data-addons-target="addonRows">
-            <div class="addon-row mb-3 d-flex align-items-center">
-              <%= text_field_tag "addon[names][]", nil, placeholder: "Nombre del Agregado", class: "form-control me-2 addon-name-field", required: true %>
-              <button type="button" class="btn btn-danger btn-sm remove-addon-row" data-action="click->addons#removeRow">Eliminar</button>
+            <div class="addon-row mb-4 flex items-center">
+              <%= text_field_tag "addon[names][]", nil, placeholder: "Nombre del Agregado", class: "flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-500 transition duration-200 text-gray-800 mr-2", required: true %>
+              <button type="button" class="py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-200 remove-addon-row" data-action="click->addons#removeRow">Eliminar</button>
             </div>
           </div>
-          <div class="d-flex justify-content-between my-3">
-            <button type="button" class="btn btn-secondary" id="add-addon-row" data-action="click->addons#addRow">Añadir otro agregado</button>
-            <%= form.submit "Guardar", class: "btn btn-primary" %>
+          <div class="flex justify-between items-center mt-5">
+            <button type="button" class="py-2 px-5 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5" id="add-addon-row" data-action="click->addons#addRow">Añadir</button>
+            <%= form.submit "Guardar", class: "py-2 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 cursor-pointer" %>
           </div>
         <% end %>
-        <hr>
-        <h5>Lista de Agregados</h5>
-        <input type="text" class="form-control mb-3" placeholder="Buscar agregado por nombre..." data-addons-target="searchField">
-        <div id="addons-table" data-addons-target="table">
+        <hr class="my-6 border-gray-200">
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">Lista de Agregados Existentes</h4>
+        <div class="relative mb-5">
+          <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition duration-200 text-gray-800 pl-10" placeholder="Buscar agregado por nombre..." data-addons-target="searchField">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+        <div id="addons-table" class="border border-gray-200 rounded-lg overflow-hidden shadow-sm" data-addons-target="table">
+          <p class="p-4 text-center text-gray-500">Cargando agregados...</p>
         </div>
       </div>
     </div>
