@@ -1,97 +1,171 @@
-<div class="container my-4 p-4 bg-white rounded shadow" data-controller="cash-close">
-  <h1 class="text-center mb-4">Nuevo Cierre de Caja</h1>
+<%= form_with(model: @cash_close, local: true, data: { controller: 'cash-close' }) do |form| %>
+  <h1 class="text-3xl sm:text-4xl font-extrabold bg-gradient-to-r from-teal-400 to-blue-400 text-transparent bg-clip-text text-center mb-6">Nuevo Cierre de Caja</h1>
   <% if @cash_close.errors.any? %>
-      <div class="alert alert-danger">
-        <h4><%= pluralize(@cash_close.errors.count, "error impide", "errores impiden") %> que impide guardar el cierre:</h4>
-        <ul>
-          <% @cash_close.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
-    <% end %>
-  <div class="mb-4">
-    <% ["efectivo", "tarjeta", "transferencia"].each do |payment_type| %>
-      <% sells = @unclosed_sells[payment_type] || [] %>
-      <% next if sells.empty? %>
-      <div class="mb-3">
-        <table class="table table-cierre-caja table-striped table-hover table-bordered mt-2">
-          <thead class="table-dark">
-            <tr>
-              <th style="width: 20%">Fecha Venta</th>
-              <th style="width: 60%">Menú y Agregados</th>
-              <th style="width: 20%">Total Venta</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% sells.each do |sell| %>
-              <tr>
-                <td data-label="Fecha Venta"><%= sell.created_at.strftime('%d/%m/%Y') %></td>
-                <td data-label="Menú y Agregados">
-                  <%=
-                    sell.sell_materials.map do |sm|
-                      "Menú #{sm.menu_item.name} - Agregados: #{sm.addons.pluck(:name).join(', ')}"
-                    end.join(' | ')
-                  %>
-                </td>
-                <td data-label="Total Venta">$<%= number_to_currency(sell.total, unit: "", delimiter: ".", precision: 0) %></td>
-              </tr>
-            <% end %>
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="2" style="text-align: right"><strong>Método de Pago:</strong> <%= payment_type.capitalize %></td>
-              <td><strong>Total:</strong> $<%= number_to_currency(sells.sum(&:total), unit: "", delimiter: ".", precision: 0) %></td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    <% end %>
-  </div>
-  <div class="text-center my-4 p-4 bg-light rounded border">
-    <table class="table table-resumen-caja table-borderless table-sm">
-      <thead>
-        <tr>
-          <th class="text-center">Método de Pago</th>
-          <th class="text-center">Monto Total</th>
-          <th class="text-center">Monto en Caja</th>
-          <th class="text-center">Diferencia</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% ["cash", "card", "transfer"].each do |type| %>
-          <% total_value = @cash_close.send("total_#{type}") %>
-          <% next if total_value.nil? || total_value == 0 %>
-          <tr>
-            <td class="text-center fw-bold" data-label="Método de Pago"><%= Sell.translate_type(type) %></td>
-            <td class="text-center text-muted" data-label="Monto Total">$<%= number_to_currency(total_value, unit: "", delimiter: ".", precision: 0) %></td>
-            <td class="text-center" data-controller="price-formatter" data-label="Monto en Caja">
-              <%=
-                text_field_tag "observed_#{type}",
-                nil,
-                value: 0,
-                class: "form-control",
-                data: {
-                  "price-formatter-target": "input",
-                  action: "input->cash-close#updateDifference input->price-formatter#formatPrice",
-                  payment_type: type
-                }
-              %>
-            </td>
-            <td class="text-center" id="difference_<%= type %>" data-label="Diferencia" data-cash-close-target="difference">-</td>
-          </tr>
+    <div class="bg-red-800 text-white p-4 rounded-lg shadow-md mb-6 border border-red-700">
+      <h4 class="font-bold mb-2"><%= pluralize(@cash_close.errors.count, "error impide", "errores impiden") %> que impide guardar el cierre:</h4>
+      <ul class="list-disc list-inside">
+        <% @cash_close.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
         <% end %>
-      </tbody>
-    </table>
-  </div>
-  <%= form_with(model: @cash_close, local: true) do |form| %>
-    <%= form.hidden_field :total_sales, id: "cash_close_total_sales", data: { "cash-close-target": "totalSales" } %>
-    <%= form.hidden_field :total_cash, id: "cash_close_total_cash", data: { expected_amount: @cash_close.total_cash } %>
-    <%= form.hidden_field :total_card, id: "cash_close_total_card", data: { expected_amount: @cash_close.total_card } %>
-    <%= form.hidden_field :total_transfer, id: "cash_close_total_transfer", data: { expected_amount: @cash_close.total_transfer } %>
-    <div class="d-flex justify-content-between mt-4">
-      <%= link_to "Cancelar", cash_closes_path, class: "btn btn-outline-secondary" %>
-      <%= form.submit "Crear Cierre de Caja", class: "btn btn-primary" %>
+      </ul>
     </div>
   <% end %>
-</div>
+  <div class="bg-gray-800 bg-opacity-90 rounded-lg shadow-xl p-6 mb-8 border border-gray-700">
+    <h2 class="text-2xl font-bold text-gray-100 mb-6">Ventas Pendientes para Cerrar</h2>
+    <% has_unclosed_sells = false %>
+    <% ["efectivo", "tarjeta", "transferencia"].each do |payment_type| %>
+    <% sells = @unclosed_sells[payment_type] || [] %>
+      <% has_unclosed_sells = true %>
+      <div class="mb-8 last:mb-0">
+        <h3 class="text-xl font-bold text-gray-200 mb-4 capitalize"><%= Sell.translate_type(payment_type) %></h3>
+        <div class="hidden sm:block overflow-x-auto rounded-lg shadow-md border border-gray-700">
+          <table class="min-w-full divide-y divide-gray-700 table-fixed">
+            <thead class="bg-gray-700">
+              <tr>
+                <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Fecha Venta</th>
+                <th scope="col" class="w-3/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Menú y Agregados</th>
+                <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Total Venta</th>
+              </tr>
+            </thead>
+            <tbody class="bg-gray-800 divide-y divide-gray-700">
+              <% sells.each do |sell| %>
+                <tr class="hover:bg-gray-700 transition duration-150 ease-in-out">
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200 overflow-hidden text-ellipsis"><%= sell.created_at.strftime('%d-%m-%Y') %></td>
+                  <td class="px-6 py-4 text-sm text-gray-200 overflow-hidden text-ellipsis">
+                    <%=
+                      sell.sell_materials.map do |sm|
+                        addons = sm.addons.pluck(:name).join(', ').presence
+                        "#{sm.menu_item.name} #{addons ? "(#{addons})" : ''}"
+                      end.join(' | ')
+                    %>
+                  </td>
+                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200 overflow-hidden text-ellipsis">
+                    $<span class="font-semibold text-teal-400"><%= number_to_currency(sell.total, unit: "", delimiter: ".", precision: 0) %></span>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+            <tfoot>
+              <tr class="bg-gray-700">
+                <td colspan="2" class="px-6 py-3 text-right text-base font-bold text-gray-100 uppercase">Total en <%= payment_type %>:</td>
+                <td class="px-6 py-3 whitespace-nowrap text-base font-bold text-teal-300">$<%= number_to_currency(sells.sum(&:total), unit: "", delimiter: ".", precision: 0) %></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="sm:hidden grid grid-cols-1 gap-4 mt-4">
+          <% sells.each do |sell| %>
+            <div class="bg-gray-700 rounded-lg shadow-md p-4 space-y-2">
+              <p class="text-lg font-bold text-teal-400">Venta #<%= sell.id %></p>
+              <p><strong class="text-gray-300">Fecha:</strong> <span class="text-gray-200"><%= sell.created_at.strftime('%d/%m/%Y') %></span></p>
+              <p><strong class="text-gray-300">Productos:</strong> <span class="text-gray-200">
+                <%=
+                  sell.sell_materials.map do |sm|
+                    addons = sm.addons.pluck(:name).join(', ').presence
+                    "#{sm.menu_item.name} #{addons ? "(#{addons})" : ''}"
+                  end.join(' | ')
+                %>
+              </span></p>
+              <p class="text-xl font-bold text-right pt-2 border-t border-gray-600">
+                Total: <span class="text-teal-300">$<%= number_to_currency(sell.total, unit: "", delimiter: ".", precision: 0) %></span>
+              </p>
+            </div>
+          <% end %>
+          <div class="bg-gray-700 rounded-lg shadow-md p-4 text-right">
+            <p class="text-xl font-bold text-gray-100 uppercase">Total en <%= Sell.translate_type(payment_type) %>:</p>
+            <p class="text-2xl font-bold text-teal-300">$<%= number_to_currency(sells.sum(&:total), unit: "", delimiter: ".", precision: 0) %></p>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="bg-gray-800 bg-opacity-90 rounded-lg shadow-xl p-6 border border-gray-700">
+    <h2 class="text-2xl font-bold text-gray-100 mb-6">Resumen del Cierre y Montos Observados</h2>
+    <div class="hidden sm:block overflow-x-auto rounded-lg shadow-md border border-gray-700">
+      <table class="min-w-full divide-y divide-gray-700 table-fixed">
+        <thead class="bg-gray-700">
+          <tr>
+            <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Método de Pago</th>
+            <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Monto Total Esperado</th>
+            <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Monto en Caja</th>
+            <th scope="col" class="w-1/4 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Diferencia</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-800 divide-y divide-gray-700">
+          <% ["cash", "card", "transfer"].each do |type| %>
+            <% expected_value = @cash_close.send("total_#{type}") || 0 %>
+            <tr class="hover:bg-gray-700 transition duration-150 ease-in-out">
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200 capitalize"><%= Sell.translate_type(type) %></td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-teal-300 font-semibold"
+                  data-cash-close-target="expected<%= type.capitalize %>"
+                  data-expected-amount="<%= expected_value %>">
+                  $<%= number_to_currency(expected_value, unit: "", delimiter: ".", precision: 0) %>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-200">
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">$</span>
+                  <%= form.number_field "observed_#{type}",
+                      value: 0,
+                      class: "block w-full px-3 py-2 pl-7 pr-3 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-500 sm:text-sm transition duration-200 bg-gray-700 text-white text-center",
+                      data: {
+                        "price-formatter-target": "input",
+                        action: "input->cash-close#updateDifference input->price-formatter#formatPrice",
+                        payment_type: type,
+                        "cash-close-target": "observedInput"
+                      },
+                      min: 0
+                  %>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-bold" data-cash-close-target="difference<%= type.capitalize %>">-</td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+    <div class="sm:hidden grid grid-cols-1 gap-4 mt-4">
+      <% ["cash", "card", "transfer"].each do |type| %>
+        <% expected_value = @cash_close.send("total_#{type}") || 0 %>
+        <div class="bg-gray-700 rounded-lg shadow-md p-4 space-y-3">
+          <h4 class="text-xl font-bold text-teal-400 capitalize"><%= Sell.translate_type(type) %></h4>
+          <p><strong class="text-gray-300">Monto Esperado:</strong>
+            <span class="text-teal-300"
+                  data-cash-close-target="expected<%= type.capitalize %>"
+                  data-expected-amount="<%= expected_value %>">
+                  $<%= number_to_currency(expected_value, unit: "", delimiter: ".", precision: 0) %>
+            </span>
+          </p>
+          <div>
+            <label for="cash_close_observed_<%= type %>_mobile" class="block text-sm font-medium text-gray-300 mb-1">Monto en Caja:</label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">$</span>
+              <%= form.number_field "observed_#{type}",
+                  value: 0,
+                  id: "cash_close_observed_#{type}_mobile",
+                  class: "block w-full px-3 py-2 pl-7 pr-3 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-500 text-sm transition duration-200 bg-gray-600 text-white text-center",
+                  data: {
+                    "price-formatter-target": "input",
+                    action: "input->cash-close#updateDifference input->price-formatter#formatPrice",
+                    payment_type: type,
+                    "cash-close-target": "observedInput"
+                  },
+                  min: 0
+              %>
+            </div>
+          </div>
+          <p class="text-lg font-bold text-right pt-2 border-t border-gray-600">
+            Diferencia: <span data-cash-close-target="difference<%= type.capitalize %>">-</span>
+          </p>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <%= form.hidden_field :total_sales, data: { "cash-close-target": "totalSales" } %>
+  <%= form.hidden_field :total_cash, data: { "cash-close-target": "submitTotalCash" } %>
+  <%= form.hidden_field :total_card, data: { "cash-close-target": "submitTotalCard" } %>
+  <%= form.hidden_field :total_transfer, data: { "cash-close-target": "submitTotalTransfer" } %>
+  <div class="flex flex-col sm:flex-row justify-end gap-4 mt-6">
+    <%= link_to "Cancelar", cash_closes_path, class: "w-full sm:w-auto py-3 px-6 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 text-center cursor-pointer" %>
+    <%= form.submit "Crear Cierre de Caja", class: "w-full sm:w-auto py-3 px-6 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 text-center cursor-pointer" %>
+  </div>
+<% end %>

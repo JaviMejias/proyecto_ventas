@@ -5,7 +5,7 @@ class SellsController < ApplicationController
 
   def index
     @q = Sell.ransack(params[:q])
-    @sells = @q.result.order(id: :asc).page(params[:page]).per(10)
+    @sells = @q.result.order(id: :desc).page(params[:page]).per(10)
   end
 
   def new

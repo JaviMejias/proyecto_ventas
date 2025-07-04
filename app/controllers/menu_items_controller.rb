@@ -5,7 +5,7 @@ class MenuItemsController < ApplicationController
 
   def index
     @q = MenuItem.ransack(params[:q])
-    @menu_items = @q.result.order(id: :asc).page(params[:page]).per(10)
+    @menu_items = @q.result.order(id: :desc).page(params[:page]).per(10)
   end
 
   def new

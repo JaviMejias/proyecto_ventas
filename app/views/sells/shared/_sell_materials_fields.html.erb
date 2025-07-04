@@ -1,60 +1,118 @@
-<div class="nested-form-wrapper" data-new-record="<%= f.object.new_record? %>">
-  <td>
-    <label for="<%= f.object_name %>_menu_item_id" class="sell-materials-label">Menu Item</label>
-    <%= f.select :menu_item_id, MenuItem.all.pluck(:name, :id), 
-      { include_blank: 'Seleccione' }, 
-      {
-        class: 'form-control menu-item-select slim-select',
-        data: {
-          controller: "slim-select",
-          action: "change->sell-materials#handleMenuItemChange",
-          sell_materials_target: "menuItem"
-        }
-      }
-    %>
-  </td>
-  <td>
-    <label for="<%= f.object_name %>_addons" class="sell-materials-label">Agregados</label>
-    <%=
-      f.select :addon_ids,
-      Addon.all.pluck(:name, :id),
-      { include_blank: false },
-      {
-        class: 'form-control slim-select-multiple',
-        multiple: true,
-        data: { controller: "slim-select", action: "change->sell-materials#setAddonMaxSelected", }
-      }
-    %>
-  </td>
-  <td>
-    <label for="<%= f.object_name %>_quantity" class="sell-materials-label">Cantidad</label>
-    <%=
-      f.text_field :quantity,
-      value: 0,
-      class: "form-control quantity",
+<%= f.hidden_field :_destroy, data: { nested_form_target: 'hiddenDeletionField' } %>
+<% columns = [
+  {
+    type: :select,
+    attribute: :menu_item_id,
+    label: 'Producto',
+    collection: MenuItem.all.pluck(:name, :id),
+    options: { include_blank: 'Seleccione' },
+    html_options: {
       data: {
-        action: "input->sell-materials#calculateTotalForRow"
+        controller: "slim-select",
+        action: "change->sell-materials#handleMenuItemChange",
+        sell_materials_target: "menuItem"
       }
-    %>
-  </td>
-  <td data-controller="price-formatter">
-    <label for="<%= f.object_name %>_price" class="sell-materials-label">Precio</label>
-    <%=
-      f.text_field :price,
-      value: 0,
-      class: "form-control price-field", 
+    }
+  },
+  {
+    type: :select,
+    attribute: :addon_ids,
+    label: 'Agregados',
+    collection: Addon.all.pluck(:name, :id),
+    options: { include_blank: 'Seleccione', selected: f.object.addon_ids, multiple: true },
+    html_options: {
       data: {
-        "sell-materials-target": "priceField",
+        controller: "slim-select",
+        action: "change->sell-materials#setAddonMaxSelected change->sell-materials#calculateTotalForRow",
+        sell_materials_target: "addonSelect"
+      }
+    }
+  },
+  {
+    type: :number_field,
+    attribute: :quantity,
+    label: 'Cantidad',
+    value: f.object.quantity.presence || 1,
+    html_options: {
+      min: 1,
+      class: 'text-center',
+      data: {
+        action: "input->sell-materials#calculateTotalForRow",
+        sell_materials_target: "quantityField"
+      }
+    }
+  },
+  {
+    type: :text_field,
+    attribute: :price,
+    label: 'Precio Unitario',
+    value: f.object.price.presence || 0,
+    readonly: true,
+    currency: true,
+    html_options: {
+      class: 'font-semibold text-center',
+      data: {
         "price-formatter-target": "input",
-        action: "input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow"
+        action: "input->price-formatter#formatPrice input->sell-materials#calculateTotalForRow",
+        sell_materials_target: "priceField"
       }
-    %>
+    }
+  },
+  {
+    type: :text_field,
+    attribute: :total,
+    label: 'Subtotal',
+    value: f.object.total.presence || 0,
+    readonly: true,
+    currency: true,
+    html_options: {
+      class: 'font-bold text-center',
+      data: {
+        sell_materials_target: "rowTotalField"
+      }
+    }
+  }
+] %>
+<% common_input_classes = "block w-full px-3 py-2 border border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-blue-400 focus:border-blue-500 sm:text-sm transition duration-200 bg-gray-800 text-white" %>
+<% readonly_input_classes = "bg-gray-800 cursor-not-allowed" %>
+<% label_classes = "sell-materials-label block text-xs font-semibold text-gray-400 uppercase md:hidden mb-1" %>
+<% td_classes = "px-6 py-4 whitespace-nowrap text-sm text-gray-200" %>
+<% columns.each do |col| %>
+  <td class="<%= td_classes %>">
+    <label for="<%= f.object_name %>_<%= col[:attribute] %>" class="<%= label_classes %>"><%= col[:label] %></label>
+    <div class="<%= 'relative' if col[:currency] %>">
+      <% if col[:currency] %>
+        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">$</span>
+      <% end %>
+
+      <% field_classes = common_input_classes.dup %>
+      <% field_classes << " #{readonly_input_classes}" if col[:readonly] %>
+      <% field_classes << " pl-7 pr-3" if col[:currency] %>
+      <% field_classes << " #{col[:html_options][:class]}" if col[:html_options] && col[:html_options][:class] %>
+      <% field_data = (col[:html_options] && col[:html_options][:data]) ? col[:html_options][:data].to_h : {} %>
+
+      <% case col[:type] %>
+      <% when :select %>
+        <%= f.select col[:attribute], col[:collection], col[:options],
+          class: field_classes,
+          data: field_data
+        %>
+      <% when :number_field %>
+        <%= f.number_field col[:attribute], value: col[:value], min: col[:min],
+          class: field_classes,
+          data: field_data
+        %>
+      <% when :text_field %>
+        <%= f.text_field col[:attribute], value: col[:value], readonly: col[:readonly],
+          class: field_classes,
+          data: field_data
+        %>
+      <% end %>
+    </div>
   </td>
-  <td>
-    <label for="<%= f.object_name %>_total" class="sell-materials-label">Total</label>
-    <%= f.text_field :total, value: 0, class: "form-control", readonly: true %>
-  </td>
-  <td class="text-center">
-    <button type="button" class="btn btn-warning" data-action="sell-materials#removeRow">Eliminar</button>
-  </td>
-</template>
+<% end %>
+<td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+  <button type="button" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg shadow-md transition duration-200 ease-in-out transform hover:-translate-y-0.5 text-center cursor-pointer" data-action="nested-form#remove click->sell-materials#removeRow">
+    Eliminar
+  </button>
+</td>

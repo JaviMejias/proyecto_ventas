@@ -1,26 +1,48 @@
 import { Controller } from "@hotwired/stimulus"
 
-let selectedAddonsByRow = {}
-
 export default class extends Controller {
-  static targets = ["priceField", "menuItem", "addonSelect", "totalField"]
+  static targets = [
+    "menuItem",
+    "addonSelect",
+    "quantityField",
+    "priceField",
+    "rowTotalField",
+    "totalField"
+  ]
 
   connect() {
+    this.updateTotalSale()
   }
 
-  handleMenuItemChange(event) {
-    this.setMenuItemPrice(event)
-    this.toggleAddonSelect(event)
-    this.updateRowItems(event)
+  async handleMenuItemChange(event) {
+    const row = event.target.closest('tr')
+    const menuItemId = this.getMenuItemSelect(row)?.value
+    const quantityField = this.getQuantityField(row)
+
+    if (menuItemId) {
+      await this.setMenuItemPriceAndMaxAddons(row, menuItemId)
+      this.toggleAddonSelect(row, menuItemId)
+      if (quantityField) {
+        quantityField.value = 1
+        quantityField.dispatchEvent(new Event('input', { bubbles: true }))
+      }
+    } else {
+      this.resetRowFields(row)
+      this.toggleAddonSelect(row, menuItemId)
+    }
   }
 
   setAddonMaxSelected(event) {
     const row = event.target.closest('tr')
-    const addonSelect = row.querySelector('.slim-select-multiple')
-    const maxAddons = parseInt(row.querySelector('.menu-item-select').getAttribute("data-max-addons"), 10)
+    const addonSelectElement = this.getAddonSelect(row)
+    const menuItemSelectElement = this.getMenuItemSelect(row)
+
+    if (!addonSelectElement || !menuItemSelectElement) return
+
+    const maxAddons = parseInt(menuItemSelectElement.getAttribute("data-max-addons"), 10)
 
     const addonSelectController = this.application.getControllerForElementAndIdentifier(
-      addonSelect,
+      addonSelectElement,
       "slim-select"
     )
 
@@ -29,59 +51,42 @@ export default class extends Controller {
     }
   }
 
-  async setMenuItemPrice(event) {
-    const menuItemId = event.target.value
+  async setMenuItemPriceAndMaxAddons(row, menuItemId) {
+    const priceField = this.getPriceField(row)
+    const menuItemField = this.getMenuItemSelect(row)
 
-    if (menuItemId) {
-      try {
-        const response = await fetch(`/menu_items/${menuItemId}/get_menu_item_price`, {
-          headers: { "Accept": "application/json" }
-        })
-        const data = await response.json()
+    if (!menuItemId || !priceField || !menuItemField) return
 
-        if (data) {
-          const row = event.target.closest('tr')
-          const priceField = row.querySelector('.price-field')
-          const menuItemField = row.querySelector('.menu-item-select')
+    try {
+      const response = await fetch(`/menu_items/${menuItemId}/get_menu_item_price`, {
+        headers: { "Accept": "application/json" }
+      });
+      const data = await response.json()
 
-          if (priceField) {
-            priceField.value = data.price
-            priceField.dispatchEvent(new Event('input'))
+      if (data) {
+        priceField.value = data.price
+        priceField.dispatchEvent(new Event('input', { bubbles: true }))
 
-            const priceFormatterController = this.application.getControllerForElementAndIdentifier(
-              priceField,
-              "price-formatter"
-            )
-
-            if (priceFormatterController) {
-              priceFormatterController.formatPrice()
-            }
-          }
-
-          if (menuItemField) {
-            menuItemField.setAttribute("data-max-addons", data.max_addons)
-          }
-        }
-      } catch (error) {
-        console.error("Error al obtener el precio del menu item:", error)
+        menuItemField.setAttribute("data-max-addons", data.max_addons)
       }
+    } catch (error) {
+      console.error("Error al obtener el precio y max_addons del menu item:", error)
     }
   }
 
-  toggleAddonSelect(event) {
-    const row = event.target.closest('tr')
-    const addonSelect = row.querySelector('.slim-select-multiple')
-    const menuItemValue = event.target.value
+  toggleAddonSelect(row, menuItemId) {
+    const addonSelectElement = this.getAddonSelect(row)
+
+    if (!addonSelectElement) return
 
     const addonSelectController = this.application.getControllerForElementAndIdentifier(
-      addonSelect,
+      addonSelectElement,
       "slim-select"
     )
 
     if (addonSelectController) {
       addonSelectController.clearSelection()
-
-      if (menuItemValue) {
+      if (menuItemId) {
         addonSelectController.enable()
       } else {
         addonSelectController.disable()
@@ -89,56 +94,81 @@ export default class extends Controller {
     }
   }
 
-  updateRowItems(event) {
-    const row = event.target.closest("tr")
-    const quantityField = row.querySelector(".form-control.quantity")
-    const priceField = row.querySelector(".price-field")
-    const rowTotalField = row.querySelector(".form-control[readonly]")
-    const menuItemValue = event.target.value
-  
-    if (quantityField && priceField) {
-      if (menuItemValue) {
-        quantityField.value = 1
-        this.setMenuItemPrice(event)
-      } else {
-        quantityField.value = 0
-        priceField.value = 0
-        rowTotalField.value = 0
-      }
+  resetRowFields(row) {
+    const quantityField = this.getQuantityField(row)
+    const priceField = this.getPriceField(row)
+    const rowTotalField = this.getRowTotalField(row)
+
+    if (quantityField) quantityField.value = 0
+    if (priceField) {
+      priceField.value = 0
+      priceField.dispatchEvent(new Event('input', { bubbles: true }))
     }
-  
-    this.calculateTotalForRow(event)
+    if (rowTotalField) rowTotalField.value = 0
+
+    this.updateTotalSale()
   }
 
   removeRow(event) {
-    const rows = this.element.querySelectorAll("tr.sell-materials-row")
-    
-    if (rows.length > 1) {
-      const row = event.target.closest("tr.sell-materials-row")
-      const rowIndex = Array.from(row.parentElement.children).indexOf(row)
-      delete selectedAddonsByRow[rowIndex]
-      row.remove()
+    const row = event.target.closest(".nested-form-wrapper")
+    if (row) {
+      const destroyField = row.querySelector("input[name$='[_destroy]']")
+      if (destroyField) {
+        destroyField.value = "1"
+        row.style.display = "none"
+        this.updateTotalSale()
+      }
     }
   }
 
   calculateTotalForRow(event) {
     const row = event.target.closest("tr")
-    const quantity = parseFloat(row.querySelector('.form-control.quantity')?.value) || 0
-    const price = parseFloat(row.querySelector('.price-field')?.value.replace(/\./g, "")) || 0
-    const rowTotalField = row.querySelector(".form-control[readonly]")
+    const quantity = parseFloat(this.getQuantityField(row)?.value) || 0
+    const price = parseFloat(this.getPriceField(row)?.value.replace(/\./g, "").replace(/,/g, ".")) || 0
 
     const total = quantity * price
-    rowTotalField.value = new Intl.NumberFormat("es-CL").format(total)
+    const rowTotalField = this.getRowTotalField(row)
+
+    if (rowTotalField) {
+      rowTotalField.value = new Intl.NumberFormat("es-CL").format(total)
+    }
     this.updateTotalSale()
   }
 
   updateTotalSale() {
-    const rows = this.element.querySelectorAll("tr.sell-materials-row")
     let totalSale = 0
-    rows.forEach(row => {
-      const rowTotal = parseFloat(row.querySelector(".form-control[readonly]").value.replace(/\./g, "")) || 0
-      totalSale += rowTotal
+    this.rowTotalFieldTargets.forEach(rowTotalField => {
+      const row = rowTotalField.closest(".nested-form-wrapper")
+      const destroyField = row?.querySelector("input[name$='[_destroy]']")
+
+      if (!destroyField || destroyField.value !== "1") {
+        const rowTotal = parseFloat(rowTotalField.value.replace(/\./g, "").replace(/,/g, ".")) || 0
+        totalSale += rowTotal
+      }
     })
-    this.totalFieldTarget.value = new Intl.NumberFormat("es-CL").format(totalSale)
+
+    if (this.hasTotalFieldTarget) {
+      this.totalFieldTarget.value = new Intl.NumberFormat("es-CL").format(totalSale)
+    }
+  }
+
+  getMenuItemSelect(row) {
+    return row.querySelector('[data-sell-materials-target="menuItem"]') || null;
+  }
+
+  getAddonSelect(row) {
+    return row.querySelector('[data-sell-materials-target="addonSelect"]') || null;
+  }
+
+  getQuantityField(row) {
+    return row.querySelector('[data-sell-materials-target="quantityField"]') || null;
+  }
+
+  getPriceField(row) {
+    return row.querySelector('[data-sell-materials-target="priceField"]') || null;
+  }
+
+  getRowTotalField(row) {
+    return row.querySelector('[data-sell-materials-target="rowTotalField"]') || null;
   }
 }

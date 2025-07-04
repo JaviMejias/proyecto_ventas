@@ -1,14 +1,59 @@
-<nav class="bg-gray-800 p-4 shadow-lg rounded-b-lg">
-  <div class="container mx-auto flex justify-between items-center">
+<nav class="bg-gray-800 bg-opacity-90 py-4 shadow-lg rounded-b-lg">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+    <div class="flex items-center space-x-2 md:space-x-6">
 
-    <div class="hidden md:flex space-x-6">
-      <%= link_to 'Carta', menu_items_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md font-medium transition-colors duration-200 #{'bg-gray-700 text-white' if controller_name == 'menu_items'}" %>
-      <%= link_to 'Ventas', new_sell_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md font-medium transition-colors duration-200 #{'bg-gray-700 text-white' if controller_name == 'sells' && ['new', 'create'].include?(params[:action])}" %>
-      <%= link_to 'Historial Ventas', sells_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md font-medium transition-colors duration-200 #{'bg-gray-700 text-white' if controller_name == 'sells' && ['index', 'show'].include?(params[:action])}" %>
-      <%= link_to 'Cierre de Caja', cash_closes_path, class: "text-gray-300 hover:text-white px-3 py-2 rounded-md font-medium transition-colors duration-200 #{'bg-gray-700 text-white' if controller_name == 'cash_closes'}" %>
+      <%
+        nav_items = [
+          { text: 'Carta', path: menu_items_path, controllers: ['menu_items'] },
+          { text: 'Ventas', path: new_sell_path, controllers: ['sells'], actions: ['new', 'create'] },
+          { text: 'Historial Ventas', path: sells_path, controllers: ['sells'], actions: ['index', 'show'] },
+          { text: 'Cierre de Caja', path: cash_closes_path, controllers: ['cash_closes'] }
+        ]
+
+        base_link_classes = %w(
+          relative
+          text-gray-200
+          hover:text-white
+          px-3
+          py-2
+          rounded-md
+          font-medium
+          transition-all
+          duration-300
+          group
+        )
+
+        active_link_classes = "bg-gray-700 text-white shadow-inner"
+        base_indicator_classes = "absolute inset-x-0 bottom-0 h-0.5 bg-indigo-500 transition-transform duration-300 ease-out"
+      %>
+
+      <% nav_items.each do |item| %>
+        <%
+          is_active = false
+
+          if item[:controllers].include?(controller_name)
+            if item[:actions]
+              is_active = item[:actions].include?(action_name)
+            else
+              is_active = true
+            end
+          end
+
+          link_classes = base_link_classes.dup
+          link_classes << active_link_classes if is_active
+
+          indicator_dynamic_classes = ""
+          indicator_dynamic_classes << "scale-x-100" if is_active
+        %>
+
+        <%= link_to item[:path], class: link_classes.join(' ') do %>
+          <%= item[:text] %>
+          <span class="transform scale-x-0 group-hover:scale-x-100 <%= base_indicator_classes %> <%= indicator_dynamic_classes %>"></span>
+        <% end %>
+      <% end %>
+
     </div>
-
-    <button class="md:hidden text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-2" type="button" aria-label="Toggle navigation">
+    <button class="md:hidden text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-2" type="button" aria-label="Toggle navigation">
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
       </svg>
