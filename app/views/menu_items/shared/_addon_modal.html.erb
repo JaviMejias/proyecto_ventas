@@ -1,49 +1,52 @@
 <div class="fixed inset-0 z-50 overflow-y-auto opacity-0 pointer-events-none transition-opacity duration-300"
-     id="addonsModal" aria-labelledby="addonsModalLabel" aria-hidden="true" 
-     data-modal-target="container"
-     data-action="transitionend->modal#onTransitionEndShowing">
+     id="addonsModal" aria-labelledby="addonsModalLabel" aria-hidden="true"
+     data-modal-target="container">
   <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300"
        data-action="click->modal#close" data-modal-target="backdrop">
   </div>
   <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
     <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-    <div class="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full
+    <div class="relative inline-block align-bottom bg-gray-700 rounded-lg text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full
                 opacity-0 scale-95 duration-300 ease-out"
          data-modal-target="panel"
          role="dialog" aria-modal="true" aria-labelledby="addonsModalLabel">
-      <div class="bg-gray-100 px-6 py-4 flex justify-between items-center border-b border-gray-200">
-        <h3 class="text-xl font-semibold text-gray-800" id="addonsModalLabel">Gestionar Agregados</h3>
-        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-1" data-action="click->modal#close" aria-label="Cerrar">
+      <div class="bg-gray-800 px-6 py-4 flex justify-between items-center border-b border-gray-600">
+        <h3 class="text-xl font-semibold text-white" id="addonsModalLabel">Gestionar Agregados</h3>
+        <button type="button" class="text-gray-300 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-400 rounded-md p-1" data-action="click->modal#close" aria-label="Cerrar">
           <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
-      <div class="bg-white px-6 pt-5 pb-6" data-controller="addons">
+      <div class="bg-gray-700 px-6 pt-5 pb-6" data-controller="addons" data-action="modal:open->addons#loadAddonsOnModalOpen">
         <%= form_with(url: addons_path, remote: true, id: "new-addon-form", data: { action: "submit->addons#submitForm", addons_target: "form" }) do |form| %>
           <div id="addon-rows" data-addons-target="addonRows">
-            <div class="addon-row mb-4 flex items-center">
-              <%= text_field_tag "addon[names][]", nil, placeholder: "Nombre del Agregado", class: "flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-purple-500 transition duration-200 text-gray-800 mr-2", required: true %>
-              <button type="button" class="py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-200 remove-addon-row" data-action="click->addons#removeRow">Eliminar</button>
+            <div class="addon-row mb-4 flex flex-col sm:flex-row sm:items-center">
+              <%= text_field_tag "addon[names][]", nil, placeholder: "Nombre del Agregado", class: "w-full sm:flex-grow px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition duration-200 text-gray-200 placeholder-gray-400 mb-2 sm:mb-0 sm:mr-2", required: true %>
+              <button type="button" class="py-2 px-4 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-200 remove-addon-row w-full sm:w-auto" data-action="click->addons#removeRow">Eliminar</button>
             </div>
           </div>
           <div class="flex justify-between items-center mt-5">
-            <button type="button" class="py-2 px-5 bg-gray-500 hover:bg-gray-600 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5" id="add-addon-row" data-action="click->addons#addRow">Añadir</button>
+            <button type="button" class="py-2 px-5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5" id="add-addon-row" data-action="click->addons#addRow">Añadir</button>
             <%= form.submit "Guardar", class: "py-2 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition duration-300 ease-in-out transform hover:-translate-y-0.5 cursor-pointer" %>
           </div>
         <% end %>
-        <hr class="my-6 border-gray-200">
-        <h4 class="text-lg font-semibold text-gray-800 mb-4">Lista de Agregados Existentes</h4>
+        <hr class="my-6 border-gray-600">
+        <h4 class="text-lg font-semibold text-gray-200 mb-4">Lista de Agregados Existentes</h4>
         <div class="relative mb-5">
-          <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition duration-200 text-gray-800 pl-10" placeholder="Buscar agregado por nombre..." data-addons-target="searchField">
+          <input type="text"
+                 class="w-full px-4 py-2 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-500 transition duration-200 text-gray-200 placeholder-gray-400 pl-10"
+                 placeholder="Buscar agregado por nombre..."
+                 data-addons-target="searchField"
+                 data-action="input->addons#updateTable">
           <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
         </div>
-        <div id="addons-table" class="border border-gray-200 rounded-lg overflow-hidden shadow-sm" data-addons-target="table">
-          <p class="p-4 text-center text-gray-500">Cargando agregados...</p>
+        <div id="addons-table" class="border border-gray-600 rounded-lg overflow-hidden shadow-md" data-addons-target="table">
+          <p class="p-4 text-center text-gray-400">Cargando agregados...</p>
         </div>
       </div>
     </div>

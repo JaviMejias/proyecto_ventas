@@ -3,8 +3,13 @@ class AddonsController < ApplicationController
     @addons = Addon.left_outer_joins(:sell_material_addons)
                    .select("addons.*, COUNT(sell_material_addons.id) AS associated_sales_count")
                    .group("addons.id")
-                   .order(:name)
-                   .page(params[:page]).per(10)
+
+    if params[:query].present?
+      @addons = @addons.where("addons.name ILIKE ?", "%#{params[:query]}%")
+    end
+
+    @addons = @addons.order(:name)
+                     .page(params[:page]).per(10)
 
     respond_to do |format|
       format.json { render json: @addons }
