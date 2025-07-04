@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: miapp-rails
+    runtime: ruby
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bin/rails server"
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "enabled"
+      - key: RAILS_MASTER_KEY
+        sync: true
+      - key: WEB_CONCURRENCY
+        value: "2"
+      - key: DATABASE_URL
+        fromDatabase:
+          name: miapp-db
+          property: connectionString
+
+databases:
+  - name: miapp-db
+    plan: free
