@@ -67,7 +67,7 @@ Para poner este proyecto en funcionamiento en tu entorno local:
 
 4.  **Iniciar el servidor Rails:**
     ```bash
-    rails s
+    ./bin/dev
     ```
 
 5.  **Acceder a la aplicación:**
