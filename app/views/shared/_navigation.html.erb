@@ -1,36 +1,37 @@
-<nav class="bg-gray-800 bg-opacity-90 py-4 shadow-lg rounded-b-lg">
+<nav class="bg-gray-800 bg-opacity-90 py-4 shadow-lg rounded-b-lg" data-controller="navbar">
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-    <div class="flex items-center space-x-2 md:space-x-6">
 
-      <%
-        nav_items = [
-          { text: 'Carta', path: menu_items_path, controllers: ['menu_items'] },
-          { text: 'Ventas', path: new_sell_path, controllers: ['sells'], actions: ['new', 'create'] },
-          { text: 'Historial Ventas', path: sells_path, controllers: ['sells'], actions: ['index', 'show'] },
-          { text: 'Cierre de Caja', path: cash_closes_path, controllers: ['cash_closes'] }
-        ]
+    <%
+      nav_items = [
+        { text: 'Carta', path: menu_items_path, controllers: ['menu_items'] },
+        { text: 'Ventas', path: new_sell_path, controllers: ['sells'], actions: ['new', 'create'] },
+        { text: 'Historial Ventas', path: sells_path, controllers: ['sells'], actions: ['index', 'show'] },
+        { text: 'Cierre de Caja', path: cash_closes_path, controllers: ['cash_closes'] }
+      ]
 
-        base_link_classes = %w(
-          relative
-          text-gray-200
-          hover:text-white
-          px-3
-          py-2
-          rounded-md
-          font-medium
-          transition-all
-          duration-300
-          group
-        )
+      base_link_classes = %w(
+        relative
+        text-gray-200
+        hover:text-white
+        px-3
+        py-2
+        rounded-md
+        font-medium
+        transition-all
+        duration-300
+        group
+        block
+        text-center
+      )
 
-        active_link_classes = "bg-gray-700 text-white shadow-inner"
-        base_indicator_classes = "absolute inset-x-0 bottom-0 h-0.5 bg-indigo-500 transition-transform duration-300 ease-out"
-      %>
+      active_link_classes = "bg-gray-700 text-white shadow-inner"
+      base_indicator_classes = "absolute inset-x-0 bottom-0 h-0.5 bg-indigo-500 transition-transform duration-300 ease-out"
+    %>
 
+    <div class="hidden md:flex flex-row space-x-2 md:space-x-6">
       <% nav_items.each do |item| %>
         <%
           is_active = false
-
           if item[:controllers].include?(controller_name)
             if item[:actions]
               is_active = item[:actions].include?(action_name)
@@ -51,12 +52,38 @@
           <span class="transform scale-x-0 group-hover:scale-x-100 <%= base_indicator_classes %> <%= indicator_dynamic_classes %>"></span>
         <% end %>
       <% end %>
-
     </div>
-    <button class="md:hidden text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-2" type="button" aria-label="Toggle navigation">
+
+    <button class="md:hidden text-gray-200 hover:text-white focus:outline-none focus:ring-2 focus:ring-gray-300 rounded-md p-2"
+            type="button"
+            aria-label="Toggle navigation"
+            data-action="navbar#toggleMenu">
       <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
       </svg>
     </button>
+
+  </div>
+
+  <div data-navbar-target="menu"
+       class="md:hidden overflow-hidden transition-all duration-300 ease-in-out max-h-0 opacity-0"> <div class="flex flex-col space-y-2 py-2 w-full md:w-auto">
+      <% nav_items.each do |item| %>
+        <%
+          is_active = false
+          if item[:controllers].include?(controller_name)
+            if item[:actions]
+              is_active = item[:actions].include?(action_name)
+            else
+              is_active = true
+            end
+          end
+          link_classes = base_link_classes.dup
+          link_classes << active_link_classes if is_active
+        %>
+        <%= link_to item[:path], class: link_classes.join(' ') do %>
+          <%= item[:text] %>
+        <% end %>
+      <% end %>
+    </div>
   </div>
 </nav>
