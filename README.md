@@ -1,80 +1,91 @@
-# 🍜 Sistema de Gestión de Ventas y Pedidos de Comida
+🎲 Bingo App
+🎯 Descripción General
 
-## 🎯 Descripción General
+Este proyecto es una aplicación web interactiva y fácil de usar, diseñada específicamente para gestionar y visualizar partidas de bingo. Es ideal para ser proyectada en una pantalla grande (como un proyector o TV), permitiendo que todos los participantes sigan de cerca los números sorteados de manera clara y visible. Ofrece flexibilidad tanto para el ingreso manual de números como para un sorteo automático tipo "tómbola", e incluye herramientas para corregir errores y configurar la tabla.
+✨ Características y Módulos Clave
+1. Gestión de Números
 
-Este proyecto es una aplicación web integral construida con Ruby on Rails, diseñada para optimizar y simplificar el proceso de gestión de ventas de comida, ideal para eventos de recaudación de fondos, ferias o pequeños negocios de catering. La plataforma abarca desde la configuración dinámica de menús hasta el control financiero mediante cierres de caja detallados, proporcionando una solución robusta para la administración de pedidos.
+    Modo Manual: Permite al usuario ingresar los números uno por uno a medida que son dictados, marcándolos en el tablero.
 
-## ✨ Características y Módulos Clave
+    Modo Tómbola: Ofrece una funcionalidad de sorteo automático de números aleatorios, acompañada de una animación visual para una experiencia más dinámica.
 
-### 1. **Administración de Menú y Agregados**
-* **Platos Principales:** Permite definir y gestionar un catálogo de platos principales (ej., Pollo, Pescado, Vacuno) con sus respectivos precios base.
-* **Configuración de Agregados por Plato:** Capacidad para establecer la cantidad máxima de agregados permitidos por cada plato principal, ofreciendo flexibilidad en la personalización de la oferta.
-* **Gestión de Agregados:** Módulo para la creación y administración de una lista exhaustiva de agregados disponibles. Incluye una funcionalidad de modal para añadir múltiples agregados de forma eficiente.
+    Visualización de Últimos Números: Muestra claramente el último número sorteado y el número anterior, facilitando el seguimiento del juego.
 
-### 2. **Módulo de Ventas y Pedidos (Punto de Venta)**
-* **Tabla Dinámica de Pedidos:** Interfaz de usuario intuitiva con una tabla dinámica que permite añadir múltiples líneas de pedido por transacción.
-    * **Columnas:** `Menú Item`, `Agregados`, `Cantidad`, `Precio`, `Total`, `Eliminar`.
-* **Selección Inteligente de Agregados:** Un `select` de agregados se habilita y restringe dinámicamente según el plato principal seleccionado, aplicando el límite predefinido de agregados por plato. Al intentar exceder el límite, se muestra una alerta.
-* **Cálculos Automáticos:** El precio unitario se carga automáticamente al seleccionar un plato, y el total de la línea se calcula en tiempo real al ingresar la cantidad.
-* **Detalle del Cliente y Pago:** Registro del nombre del cliente, método de pago (Efectivo, Tarjeta, Transferencia) y un total general de la venta por transacción.
+2. Interacción con el Tablero
 
-### 3. **Historial de Ventas**
-* Interfaz dedicada para visualizar un registro cronológico de todos los pedidos y transacciones previamente ingresadas.
+    Tablero Dinámico: Un tablero de bingo que se actualiza en tiempo real, resaltando visualmente los números a medida que son ingresados o sorteados. El tamaño de las celdas está optimizado para una alta visibilidad en pantallas grandes.
 
-### 4. **Cierre de Caja**
-* Módulo financiero para realizar cierres de caja de todas las ventas no consolidadas.
-* **Agrupación por Tipo de Pago:** Agrupa y muestra los totales acumulados por cada método de pago (efectivo, tarjeta, transferencia).
-* **Conciliación:** Permite al usuario ingresar el total físico "en caja". El sistema compara este valor con el total calculado, mostrando automáticamente cualquier diferencia para facilitar la conciliación.
+    Búsqueda de Números: Permite buscar rápidamente si un número específico ya ha sido sorteado y lo resalta temporalmente en el tablero para su fácil ubicación.
 
-## 🛠️ Tecnologías Utilizadas
+    Corrección de Errores: Incluye una opción para "desmarcar" un número que haya sido ingresado o sorteado por error en el modo manual, permitiendo corregir el estado del tablero.
 
-* **Backend:**
-    * Rails (versión 7.2.2)
-    * Ruby (versión 3.3.5)
-    * PostgreSQL (como base de datos)
-* **Frontend:**
-    * Bootstrap 5
-    * HTML, CSS
-    * JavaScript
-    * jQuery
-    * Stimulus
-* **Control de Versiones:**
-    * Git
+3. Configuración y Usabilidad
 
-## 🚀 Instalación y Configuración (para desarrolladores)
+    Configuración Personalizable: A través de un menú de configuración (accesible mediante un icono de tuerca), se puede ajustar el número máximo de la tabla de bingo (ej. de 1 a 150), adaptándose a diferentes variantes del juego.
 
-Para poner este proyecto en funcionamiento en tu entorno local:
+    Diseño Responsivo: La interfaz está diseñada para adaptarse y funcionar correctamente en una amplia gama de dispositivos y tamaños de pantalla, desde móviles hasta proyectores y televisores.
 
-1.  **Clonar el repositorio:**
-    ```bash
-    git clone git@github.com:JaviMejias/proyecto_ventas.git
-    cd proyecto_ventas
-    ```
+    Notificaciones Interactivas: Utiliza "toasts" (notificaciones emergentes) para mensajes de éxito, advertencia o error. Estas notificaciones se pueden cerrar haciendo clic en ellas o mediante un botón "X" dedicado.
 
-2.  **Instalar dependencias de Ruby:**
-    ```bash
+    Control de Dropdown Mejorado: El menú de configuración se cierra automáticamente al detectar un clic fuera de su área, mejorando la experiencia de usuario.
+
+🛠️ Tecnologías Utilizadas
+
+Este proyecto fue construido utilizando las siguientes tecnologías modernas para asegurar un desarrollo eficiente y un rendimiento óptimo:
+
+    Frontend:
+
+        Vite: Un bundler de próxima generación que proporciona un entorno de desarrollo frontend extremadamente rápido.
+
+        TypeScript: Un superset de JavaScript que añade tipado estático, lo que mejora la calidad del código, la detección de errores y la mantenibilidad.
+
+        Tailwind CSS: Un framework CSS utilitario que permite construir diseños personalizados directamente en el HTML, fomentando un desarrollo ágil y responsivo.
+
+        Font Awesome: Una popular biblioteca de iconos vectoriales escalables, utilizada para los elementos visuales de la interfaz.
+
+        SweetAlert2: Una librería para crear alertas y modales personalizables, atractivos e interactivos, utilizada para las notificaciones "toast".
+
+🚀 Instalación y Configuración (para desarrolladores)
+
+Para poner este proyecto en funcionamiento en tu entorno local, sigue los pasos a continuación:
+Prerrequisitos
+
+Asegúrate de tener Node.js (que incluye npm) instalado en tu sistema.
+Pasos
+
+    Clonar el repositorio:
+
+    git clone git@github.com:JaviMejias/bingo.git
+    cd bingo
+
+    Nota: Si tienes problemas con SSH, puedes usar HTTPS:
+
+    git clone https://github.com/JaviMejias/bingo.git
+    cd bingo
+
+    Instalar dependencias:
+
     npm install
-    bundle install
-    ```
+    # o si usas yarn
+    # yarn install
 
-3.  **Configurar la base de datos PostgreSQL:**
-    * Asegúrate de tener PostgreSQL instalado y en ejecución.
-    * Crea una base de datos para el proyecto (puedes ajustar `config/database.yml` si es necesario).
-    * Ejecuta las migraciones de la base de datos:
-        ```bash
-        rails db:create
-        rails db:migrate
+    Ejecutar la aplicación en modo desarrollo:
 
-4.  **Iniciar el servidor Rails:**
-    ```bash
-    ./bin/dev
-    ```
+    npm run dev
+    # o si usas yarn
+    # yarn dev
 
-5.  **Acceder a la aplicación:**
-    * Abre tu navegador y visita `http://localhost:3000` (o el puerto que Rails esté usando).
+    Esto iniciará un servidor de desarrollo y abrirá la aplicación en tu navegador predeterminado (generalmente en http://localhost:5173/).
 
-## 👨‍💻 Autor
+    Construir para producción (opcional):
+    Si deseas generar una versión optimizada de la aplicación para despliegue, ejecuta:
 
-* **Javier Mejías** ([Tu Perfil de LinkedIn](https://www.linkedin.com/in/javier-mejías-655a7936a)) - *Desarrollador Full-Stack*
+    npm run build
+    # o si usas yarn
+    # yarn build
 
----
+    Esto creará los archivos de producción estáticos en la carpeta dist/.
+
+👨‍💻 Autor
+
+    Javier Mejías (Tu Perfil de LinkedIn) - Desarrollador Full-Stack
