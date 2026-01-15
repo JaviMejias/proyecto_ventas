@@ -1,91 +1,107 @@
-🎲 Bingo App
-🎯 Descripción General
+# 🍜 Sistema de Gestión de Ventas y Pedidos de Comida
 
-Este proyecto es una aplicación web interactiva y fácil de usar, diseñada específicamente para gestionar y visualizar partidas de bingo. Es ideal para ser proyectada en una pantalla grande (como un proyector o TV), permitiendo que todos los participantes sigan de cerca los números sorteados de manera clara y visible. Ofrece flexibilidad tanto para el ingreso manual de números como para un sorteo automático tipo "tómbola", e incluye herramientas para corregir errores y configurar la tabla.
-✨ Características y Módulos Clave
-1. Gestión de Números
+Sistema web desarrollado en Ruby on Rails para la gestión de ventas y pedidos de comida, pensado para ferias, eventos o pequeños negocios gastronómicos. Permite administrar menús, ventas, historial y cierres de caja de forma simple y ordenada.
 
-    Modo Manual: Permite al usuario ingresar los números uno por uno a medida que son dictados, marcándolos en el tablero.
+CARACTERÍSTICAS PRINCIPALES
 
-    Modo Tómbola: Ofrece una funcionalidad de sorteo automático de números aleatorios, acompañada de una animación visual para una experiencia más dinámica.
+- Administración de platos principales con precios.
+- Configuración del máximo de agregados permitidos por plato.
+- Gestión de agregados mediante formularios dinámicos.
+- Punto de venta con tabla dinámica de pedidos.
+- Cálculo automático de precios y totales.
+- Registro de cliente y método de pago (efectivo, tarjeta, transferencia).
+- Historial de ventas.
+- Cierre de caja con conciliación por tipo de pago.
 
-    Visualización de Últimos Números: Muestra claramente el último número sorteado y el número anterior, facilitando el seguimiento del juego.
+TECNOLOGÍAS UTILIZADAS
 
-2. Interacción con el Tablero
+Backend:
+- Ruby 3.3.5
+- Rails 7.2.2
+- PostgreSQL
 
-    Tablero Dinámico: Un tablero de bingo que se actualiza en tiempo real, resaltando visualmente los números a medida que son ingresados o sorteados. El tamaño de las celdas está optimizado para una alta visibilidad en pantallas grandes.
+Frontend:
+- TailwindCSS (tailwindcss-rails)
+- HTML
+- JavaScript
+- Stimulus
 
-    Búsqueda de Números: Permite buscar rápidamente si un número específico ya ha sido sorteado y lo resalta temporalmente en el tablero para su fácil ubicación.
+Otros:
+- Docker
+- Docker Compose
+- Git
 
-    Corrección de Errores: Incluye una opción para "desmarcar" un número que haya sido ingresado o sorteado por error en el modo manual, permitiendo corregir el estado del tablero.
+INSTALACIÓN Y EJECUCIÓN SIN DOCKER
 
-3. Configuración y Usabilidad
+Clonar el repositorio:
 
-    Configuración Personalizable: A través de un menú de configuración (accesible mediante un icono de tuerca), se puede ajustar el número máximo de la tabla de bingo (ej. de 1 a 150), adaptándose a diferentes variantes del juego.
+git clone git@github.com:JaviMejias/proyecto_ventas.git
+cd proyecto_ventas
 
-    Diseño Responsivo: La interfaz está diseñada para adaptarse y funcionar correctamente en una amplia gama de dispositivos y tamaños de pantalla, desde móviles hasta proyectores y televisores.
+Instalar dependencias:
 
-    Notificaciones Interactivas: Utiliza "toasts" (notificaciones emergentes) para mensajes de éxito, advertencia o error. Estas notificaciones se pueden cerrar haciendo clic en ellas o mediante un botón "X" dedicado.
+bundle install
+npm install
 
-    Control de Dropdown Mejorado: El menú de configuración se cierra automáticamente al detectar un clic fuera de su área, mejorando la experiencia de usuario.
+IMPORTANTE – Compilar TailwindCSS (obligatorio):
 
-🛠️ Tecnologías Utilizadas
+rails tailwindcss:build
 
-Este proyecto fue construido utilizando las siguientes tecnologías modernas para asegurar un desarrollo eficiente y un rendimiento óptimo:
+Si este comando no se ejecuta, la aplicación fallará al iniciar.
 
-    Frontend:
+Configurar base de datos:
 
-        Vite: Un bundler de próxima generación que proporciona un entorno de desarrollo frontend extremadamente rápido.
+rails db:create
+rails db:migrate
 
-        TypeScript: Un superset de JavaScript que añade tipado estático, lo que mejora la calidad del código, la detección de errores y la mantenibilidad.
+Iniciar la aplicación:
 
-        Tailwind CSS: Un framework CSS utilitario que permite construir diseños personalizados directamente en el HTML, fomentando un desarrollo ágil y responsivo.
+./bin/dev
 
-        Font Awesome: Una popular biblioteca de iconos vectoriales escalables, utilizada para los elementos visuales de la interfaz.
+Acceder desde el navegador:
 
-        SweetAlert2: Una librería para crear alertas y modales personalizables, atractivos e interactivos, utilizada para las notificaciones "toast".
+http://localhost:3000
 
-🚀 Instalación y Configuración (para desarrolladores)
+EJECUCIÓN CON DOCKER
 
-Para poner este proyecto en funcionamiento en tu entorno local, sigue los pasos a continuación:
-Prerrequisitos
+Requisitos:
+- Docker
+- Docker Compose
 
-Asegúrate de tener Node.js (que incluye npm) instalado en tu sistema.
-Pasos
+Construir las imágenes:
 
-    Clonar el repositorio:
+docker compose build
 
-    git clone git@github.com:JaviMejias/bingo.git
-    cd bingo
+Levantar los contenedores:
 
-    Nota: Si tienes problemas con SSH, puedes usar HTTPS:
+docker compose up -d
 
-    git clone https://github.com/JaviMejias/bingo.git
-    cd bingo
+Entrar al contenedor web:
 
-    Instalar dependencias:
+docker compose exec web bash
 
-    npm install
-    # o si usas yarn
-    # yarn install
+Dentro del contenedor ejecutar:
 
-    Ejecutar la aplicación en modo desarrollo:
+rails tailwindcss:build
+rails db:create
+rails db:migrate
+rails s -b 0.0.0.0
 
-    npm run dev
-    # o si usas yarn
-    # yarn dev
+Acceder a la aplicación en:
 
-    Esto iniciará un servidor de desarrollo y abrirá la aplicación en tu navegador predeterminado (generalmente en http://localhost:5173/).
+http://localhost:3000
 
-    Construir para producción (opcional):
-    Si deseas generar una versión optimizada de la aplicación para despliegue, ejecuta:
+NOTAS IMPORTANTES
 
-    npm run build
-    # o si usas yarn
-    # yarn build
+- TailwindCSS no se compila automáticamente en la primera ejecución.
+- El comando rails tailwindcss:build es obligatorio:
+  - en la primera instalación
+  - al cambiar estilos
+  - al ejecutar el proyecto en un entorno nuevo
+- Docker evita problemas de versiones de Ruby, Node y dependencias del sistema.
 
-    Esto creará los archivos de producción estáticos en la carpeta dist/.
+AUTOR
 
-👨‍💻 Autor
-
-    Javier Mejías (Tu Perfil de LinkedIn) - Desarrollador Full-Stack
+Javier Mejías  
+Desarrollador Full-Stack  
+https://www.linkedin.com/in/javier-mejías-655a7936a
