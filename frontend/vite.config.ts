@@ -18,7 +18,7 @@ export default defineConfig({
         description: 'Punto de Venta para tu negocio',
         theme_color: '#09090b',
         background_color: '#09090b',
-        display: 'standalone',
+        display: 'fullscreen',
         icons: [
           {
             src: 'vite.svg',
