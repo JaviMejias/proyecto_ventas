@@ -36,6 +36,8 @@ export interface CashClose {
   total_transfer: number;
   total_sales: number;
   sells?: Sell[];
+  created_at?: string;
+  user?: { first_name: string; last_name?: string };
 }
 
 export interface Seller {
