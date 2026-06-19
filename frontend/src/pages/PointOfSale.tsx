@@ -35,7 +35,7 @@ export default function PointOfSale() {
   const [paymentType, setPaymentType] = useState('efectivo');
 
   const [materials, setMaterials] = useState<PosMaterial[]>([
-    { uniqueId: crypto.randomUUID(), menuItemId: '', quantity: 1, addonIds: [] },
+    { uniqueId: Math.random().toString(36).substring(2) + Date.now().toString(36), menuItemId: '', quantity: 1, addonIds: [] },
   ]);
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export default function PointOfSale() {
   const addMaterial = () => {
     setMaterials([
       ...materials,
-      { uniqueId: crypto.randomUUID(), menuItemId: '', quantity: 1, addonIds: [] },
+      { uniqueId: Math.random().toString(36).substring(2) + Date.now().toString(36), menuItemId: '', quantity: 1, addonIds: [] },
     ]);
   };
 
@@ -136,7 +136,7 @@ export default function PointOfSale() {
       await api.createSell(payload);
       Toast.fire({ icon: 'success', title: `Venta de ${formatMoney(calculateTotal())} a ${clientName} registrada` });
       setClientName('');
-      setMaterials([{ uniqueId: crypto.randomUUID(), menuItemId: '', quantity: 1, addonIds: [] }]);
+      setMaterials([{ uniqueId: Math.random().toString(36).substring(2) + Date.now().toString(36), menuItemId: '', quantity: 1, addonIds: [] }]);
     } catch (err: any) {
       Dialog.fire({ icon: 'error', title: 'Error', text: err.message });
     }
