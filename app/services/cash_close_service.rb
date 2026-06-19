@@ -25,6 +25,7 @@ class CashCloseService
     return { success: false, errors: ["No hay ventas abiertas para cerrar."] } if unclosed_sells.empty?
 
     cash_close = CashClose.new(date: Date.today, user_id: user_id)
+    cash_close.sells = unclosed_sells
     totals = preview(user_id, mode)
 
     cash_close.total_cash = totals[:total_cash]
@@ -33,7 +34,6 @@ class CashCloseService
     cash_close.total_sales = totals[:total_sales]
 
     if cash_close.save
-      unclosed_sells.update_all(cash_close_id: cash_close.id)
       { success: true, cash_close: cash_close }
     else
       { success: false, errors: cash_close.errors.full_messages }
