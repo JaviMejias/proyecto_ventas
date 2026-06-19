@@ -114,7 +114,7 @@ export const api = {
     return res.json();
   },
   exportSalesExcel: async (colorHex?: string): Promise<void> => {
-    const url = new URL(`${API_BASE}/sells/export_excel`);
+    const url = new URL(`${API_BASE}/sells/export_excel`, window.location.origin);
     if (colorHex) {
       url.searchParams.append('color', colorHex.replace('#', ''));
     }
@@ -166,7 +166,7 @@ export const api = {
     return res.json();
   },
   exportCashClosesExcel: async (colorHex?: string): Promise<void> => {
-    const url = new URL(`${API_BASE}/cash_closes/export_excel`);
+    const url = new URL(`${API_BASE}/cash_closes/export_excel`, window.location.origin);
     if (colorHex) {
       url.searchParams.append('color', colorHex.replace('#', ''));
     }
@@ -203,7 +203,10 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ cash_close: {} }),
     });
-    if (!res.ok) throw new Error('Error al crear el cierre de caja');
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.errors?.join(', ') || 'Error al crear el cierre de caja');
+    }
     return res.json();
   },
 };
