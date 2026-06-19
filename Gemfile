@@ -1,9 +1,9 @@
 source "https://rubygems.org"
 
-ruby "3.3.5"
+ruby "4.0.5"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2"
+gem "rails", "~> 8.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "sprockets-rails"
 # Use postgresql as the database for Active Record
@@ -40,6 +40,10 @@ gem "devise"
 gem "sassc-rails"
 gem "ransack"
 gem "kaminari"
+gem "rack-cors"
+gem "csv"
+gem "caxlsx"
+gem "caxlsx_rails"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -71,3 +75,6 @@ end
 gem "tailwindcss-ruby", "~> 4.1"
 
 gem "tailwindcss-rails", "~> 4.2"
+
+gem "rails-i18n", "~> 8.1"
+gem "devise-i18n", "~> 1.16"

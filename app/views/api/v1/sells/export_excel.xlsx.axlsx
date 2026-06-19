@@ -1,0 +1,87 @@
+wb = xlsx_package.workbook
+
+wb.styles do |style|
+  # Determinar color de la cabecera
+  # El frontend pasa un color hex (ej. '3B82F6'). Fallback a naranja ('F97316')
+  theme_color = params[:color].presence || 'F97316'
+  # Asegurar que no tenga el '#'
+  theme_color = theme_color.delete('#').upcase
+
+  # Definición de estilos
+  header_style = style.add_style(
+    bg_color: theme_color,
+    fg_color: "FFFFFF", # Blanco
+    b: true,
+    alignment: { horizontal: :center, vertical: :center },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  currency_style = style.add_style(
+    num_fmt: 44, # Formato de contabilidad / moneda
+    format_code: "$ #,##0",
+    alignment: { horizontal: :right, vertical: :top },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  date_style = style.add_style(
+    format_code: "dd-mm-yyyy hh:mm",
+    alignment: { horizontal: :center, vertical: :top },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  default_style = style.add_style(
+    alignment: { horizontal: :left, vertical: :top, wrap_text: true },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  wb.add_worksheet(name: "Ventas") do |sheet|
+    # Fila de encabezado
+    sheet.add_row ["Vendedor", "Cliente", "Método de Pago", "Estado", "Total", "Fecha", "Detalles"], style: header_style
+
+    @sells.each do |sell|
+      vendedor = sell.user ? "#{sell.user.first_name} #{sell.user.last_name}".strip : 'Desconocido'
+      
+      detalles = sell.sell_materials.map do |sm|
+        "#{sm.quantity}x #{sm.menu_item&.name || 'Desconocido'}"
+      end.join("\n")
+
+      metodo_pago = case sell.payment_type
+                    when "efectivo" then "Efectivo"
+                    when "tarjeta" then "Tarjeta"
+                    when "transferencia" then "Transferencia"
+                    else sell.payment_type.to_s.capitalize
+                    end
+
+      estado = case sell.status.to_s
+               when "pending" then "Pendiente"
+               when "recibido" then "Recibido"
+               when "en_proceso", "preparing" then "En proceso"
+               when "ready" then "Listo para entregar"
+               when "delivered", "entregado" then "Entregado"
+               when "cancelled" then "Cancelado"
+               else sell.status.to_s.humanize
+               end
+
+      sheet.add_row [
+        vendedor,
+        sell.client_name,
+        metodo_pago,
+        estado,
+        sell.total,
+        sell.created_at,
+        detalles
+      ], style: [
+        default_style,
+        default_style,
+        default_style,
+        default_style,
+        currency_style,
+        date_style,
+        default_style
+      ]
+    end
+
+    # Auto-ajustar anchos de columna (sin la columna de ID)
+    sheet.column_widths 20, 25, 15, 15, 15, 20, 40
+  end
+end

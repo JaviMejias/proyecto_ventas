@@ -1,17 +1,32 @@
 Rails.application.routes.draw do
-  resources :cash_closes, except: [ :edit, :update ]
-  resources :addons, only: [ :create, :index, :destroy ]
-  resources :sells, except: %i[edit destroy]
-  resources :menu_items, except: %i[show] do
-    member do
-      get :get_menu_item_price
+  namespace :api do
+    namespace :v1 do
+      resources :menu_items, only: [:index, :create, :update, :destroy]
+      resources :sells, only: [:index, :create, :show, :update] do
+        collection do
+          get :export_excel
+        end
+      end
+      resources :cash_closes, only: [:index, :create, :show] do
+        collection do
+          get :preview
+          get :export_excel
+        end
+      end
+      resources :addons, only: [:index, :create, :update, :destroy]
+      resources :sellers, only: [:index, :create, :update, :destroy]
+      
+      get 'auth/csrf_token', to: 'auth#csrf_token'
+      get 'auth/me', to: 'auth#me'
     end
   end
+
   devise_for :users
 
-  authenticated :user do
-    root to: "menu_items#index", as: :authenticated_root
-  end
+  # React takes over the root view
+  # authenticated :user do
+  #   root to: "menu_items#index", as: :authenticated_root
+  # end
 
   devise_scope :user do
     unauthenticated do
@@ -20,6 +35,7 @@ Rails.application.routes.draw do
   end
 
   get "up" => "rails/health#show", as: :rails_health_check
+  get "redirect_to_frontend", to: "application#redirect_to_frontend"
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
 end

@@ -1,2 +1,3 @@
-web: bin/rails server
+api: bin/rails server -p 3000
+frontend: npm run dev --prefix frontend
 css: bin/rails tailwindcss:watch

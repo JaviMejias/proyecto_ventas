@@ -7,4 +7,4 @@ toastr.options = {
   positionClass: "toast-top-right",
   timeOut: "3000",
   extendedTimeOut: "1000",
-}
+}import "channels"

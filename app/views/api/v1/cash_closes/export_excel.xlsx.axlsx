@@ -1,0 +1,69 @@
+wb = xlsx_package.workbook
+
+wb.styles do |style|
+  theme_color = params[:color].presence || 'F97316'
+  theme_color = theme_color.delete('#').upcase
+
+  header_style = style.add_style(
+    bg_color: theme_color,
+    fg_color: "FFFFFF",
+    b: true,
+    alignment: { horizontal: :center, vertical: :center },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  currency_style = style.add_style(
+    num_fmt: 44,
+    format_code: "$ #,##0",
+    alignment: { horizontal: :right, vertical: :top },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  date_style = style.add_style(
+    format_code: "dd-mm-yyyy hh:mm",
+    alignment: { horizontal: :center, vertical: :top },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  default_style = style.add_style(
+    alignment: { horizontal: :left, vertical: :top, wrap_text: true },
+    border: { style: :thin, color: "000000", edges: [:bottom, :top, :left, :right] }
+  )
+
+  wb.add_worksheet(name: "Cierres de Caja") do |sheet|
+    sheet.add_row ["Número", "Fecha y Hora", "Cajero", "Efectivo", "Tarjeta", "Transferencia", "Total Cierre", "Ventas Asociadas"], style: header_style
+
+    @cash_closes.each do |close|
+      cajero = close.user ? "#{close.user.first_name} #{close.user.last_name}".strip : 'Desconocido'
+      
+      # Generar un string con el resumen de las ventas
+      ventas_resumen = close.sells.map do |sell|
+        "- #{sell.client_name}: $#{sell.total} (#{sell.payment_type})"
+      end.join("\n")
+      
+      ventas_resumen = "Sin ventas" if ventas_resumen.blank?
+
+      sheet.add_row [
+        close.id,
+        close.created_at,
+        cajero,
+        close.total_cash,
+        close.total_card,
+        close.total_transfer,
+        close.total_sales,
+        ventas_resumen
+      ], style: [
+        default_style,
+        date_style,
+        default_style,
+        currency_style,
+        currency_style,
+        currency_style,
+        currency_style,
+        default_style
+      ]
+    end
+
+    sheet.column_widths 10, 20, 25, 15, 15, 15, 15, 50
+  end
+end

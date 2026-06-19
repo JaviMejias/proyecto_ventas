@@ -1,0 +1,43 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    container_name: proyecto_ventas_web_prod
+    environment:
+      RAILS_ENV: production
+      DATABASE_HOST: db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-dummy_secret_key_please_change}
+    depends_on:
+      - db
+    restart: unless-stopped
+    # No exponemos el puerto 3000 al host para mayor seguridad.
+    # Nginx en 'frontend' se conectará internamente a 'web:3000'.
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    container_name: proyecto_ventas_frontend_prod
+    ports:
+      - "8081:80"
+    depends_on:
+      - web
+    restart: unless-stopped
+
+  db:
+    image: postgres:14
+    container_name: proyecto_ventas_db_prod
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: proyecto_ventas_production
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+    restart: unless-stopped
+    # La BD tampoco se expone al mundo exterior
+
+volumes:
+  pgdata_prod:

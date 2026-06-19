@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "dev": "concurrently \"bin/rails server\" \"npm run dev --prefix frontend\" \"bin/rails tailwindcss:watch\"",
+    "prepare": "husky"
+  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",
     "@hotwired/stimulus": "^3.2.2",
@@ -6,5 +10,16 @@
     "@stimulus-components/rails-nested-form": "^5.0.0",
     "slim-select": "^2.9.2",
     "toastr": "^2.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.8.4"
+  },
+  "lint-staged": {
+    "*.rb": "bin/rubocop -a",
+    "frontend/**/*.{js,jsx,ts,tsx}": "npx --no-install eslint --config frontend/.eslintrc.cjs --fix",
+    "frontend/**/*.{js,jsx,ts,tsx,css,json,md}": "npx --no-install prettier --write"
   }
 }

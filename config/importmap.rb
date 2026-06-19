@@ -11,3 +11,5 @@ pin "slim-select" # @2.9.2
 
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin "@stimulus-components/rails-nested-form", to: "@stimulus-components--rails-nested-form.js" # @5.0.0
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin_all_from "app/javascript/channels", under: "channels"

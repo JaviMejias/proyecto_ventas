@@ -1,7 +1,10 @@
 class CashClose < ApplicationRecord
+  belongs_to :user
   has_many :sells
-
   validate :verify_related_sells
+
+  scope :recent, -> { order(date: :desc) }
+  scope :with_sells, -> { includes(:sells) }
 
   include Ransackable
 
