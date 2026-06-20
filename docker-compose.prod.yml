@@ -22,7 +22,7 @@ services:
       dockerfile: Dockerfile.prod
     container_name: proyecto_ventas_frontend_prod
     ports:
-      - "8081:80"
+      - "8082:80"
     depends_on:
       - web
     restart: unless-stopped
