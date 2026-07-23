@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
+  rescue_from StandardError do |e|
+    render json: { error: e.message, backtrace: e.backtrace[0..5] }, status: 500
+  end
+
   before_action :authenticate_user!
   before_action :configure_permitted_parameters, if: :devise_controller?
   # allow_browser versions: :modern
