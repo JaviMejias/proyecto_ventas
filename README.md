@@ -38,15 +38,49 @@ Sistema web desarrollado con arquitectura moderna (Frontend en React + Vite y Ba
 
 ## 💻 DESARROLLO LOCAL (Sin Docker)
 
-Si deseas trabajar en el código fuente de manera local:
+### Requisitos
 
-### 1. Clonar el repositorio:
+- Ruby 3.3.5 y Bundler
+- PostgreSQL
+- Node.js y npm
+
+En desarrollo local, Rails se ejecuta en `http://localhost:3000` y Vite en
+`http://localhost:5173`.
+
+### 1. Clonar el repositorio
+
 ```bash
 git clone git@github.com:JaviMejias/proyecto_ventas.git
 cd proyecto_ventas
 ```
 
-### 2. Configurar el Backend (Rails):
+### 2. Configurar PostgreSQL
+
+Inicia PostgreSQL:
+
+```bash
+sudo systemctl start postgresql
+```
+
+La configuración local usa los siguientes valores predeterminados:
+
+- Host: `localhost`
+- Usuario: `postgres`
+- Contraseña: `postgres`
+- Base de datos: `proyecto_ventas_development`
+
+Si tu usuario `postgres` tiene otra contraseña, puedes indicarla mediante una
+variable de entorno sin modificar el código:
+
+```bash
+export DATABASE_PASSWORD='TU_CONTRASEÑA'
+```
+
+También puedes configurar `DATABASE_HOST` y `DATABASE_USERNAME` de la misma
+manera si tu instalación utiliza otros valores.
+
+### 3. Configurar e iniciar el backend
+
 ```bash
 # Instalar gemas
 bundle install
@@ -54,14 +88,19 @@ bundle install
 # Crear y migrar la base de datos
 rails db:create db:migrate db:seed
 
-# Iniciar el servidor API en el puerto 3000
-rails s
+# Iniciar la API en http://localhost:3000
+rails server
 ```
 
-### 3. Configurar el Frontend (React + Vite):
-Abre una nueva pestaña en tu terminal y ejecuta:
+Puedes comprobar que el backend está disponible visitando
+`http://localhost:3000/up`.
+
+### 4. Configurar e iniciar el frontend
+
+Abre otra terminal y ejecuta:
+
 ```bash
-cd frontend
+cd ~/proyecto_ventas/frontend
 
 # Instalar dependencias
 npm install
@@ -69,7 +108,49 @@ npm install
 # Iniciar servidor de desarrollo
 npm run dev
 ```
-Accede desde el navegador a la URL que te indique Vite (usualmente `http://localhost:5173`).
+
+Accede a `http://localhost:5173`. En desarrollo, el frontend utiliza
+`http://localhost:3000` como URL predeterminada de la API. Puedes reemplazarla
+antes de iniciar Vite mediante:
+
+```bash
+VITE_API_URL='http://localhost:OTRO_PUERTO' npm run dev
+```
+
+### Solución de problemas
+
+#### Error de autenticación de PostgreSQL
+
+Si aparece `password authentication failed for user "postgres"`, la contraseña
+de PostgreSQL no coincide con la configuración predeterminada. Define
+`DATABASE_PASSWORD` con tu contraseña real y vuelve a ejecutar las tareas de la
+base de datos.
+
+#### Error de red o CORS al llamar a la API
+
+Un error con código de estado `(null)` normalmente indica que el backend no está
+disponible en el puerto esperado. Verifica primero `http://localhost:3000/up` y
+confirma que ejecutaste `rails server`.
+
+El backend permite solicitudes desde `http://localhost:5173`. Si Vite selecciona
+otro puerto porque el `5173` está ocupado, libera ese puerto o inicia Vite de
+forma explícita:
+
+```bash
+npm run dev -- --port 5173
+```
+
+### Puertos con Docker Compose en desarrollo
+
+La configuración de `docker-compose.yml` publica servicios en puertos distintos
+a los usados directamente en el equipo:
+
+- Backend: `http://localhost:3002`
+- Frontend: `http://localhost:5174`
+- PostgreSQL: `localhost:5432`
+
+Dentro de Docker, `VITE_API_URL` configura automáticamente el frontend para usar
+el backend publicado en el puerto `3002`.
 
 ---
 

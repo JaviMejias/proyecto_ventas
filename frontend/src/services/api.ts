@@ -1,6 +1,8 @@
 import { MenuItem, Addon } from '../types';
 
-export const API_URL = import.meta.env.PROD ? '' : 'http://localhost:3002';
+export const API_URL = import.meta.env.PROD
+  ? ''
+  : import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_BASE = `${API_URL}/api/v1`;
 
 const customFetch = (url: string, options: RequestInit = {}) => {
